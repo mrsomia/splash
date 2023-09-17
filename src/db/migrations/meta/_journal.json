@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1694975612105,
+      "tag": "0000_fluffy_vindicator",
+      "breakpoints": true
+    }
+  ]
+}
