@@ -10,6 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
+import { relations } from "drizzle-orm";
 
 export const users = pgTable("user", {
   id: text("id")
@@ -21,6 +22,11 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
 });
+
+export const userRealtions = relations(users, ({ one, many }) => ({
+  tournaments: many(users),
+  userToTeams: many(userToTeams),
+}));
 
 export const accounts = pgTable(
   "account",
@@ -43,6 +49,8 @@ export const accounts = pgTable(
     compoundKey: primaryKey(account.provider, account.providerAccountId),
   }),
 );
+
+// TODO: Add Drizzle relations - https://orm.drizzle.team/docs/rqb
 
 export const sessions = pgTable("session", {
   sessionToken: text("sessionToken").notNull().primaryKey(),
@@ -76,6 +84,47 @@ export const tournaments = pgTable("tournament", {
   completedAt: timestamp("completed_at"),
 });
 
+export const tournamentRelations = relations(tournaments, ({ one, many }) => ({
+  matches: many(matches),
+  teams: many(teams),
+  schedule: one(schedule),
+  tournamentAdmins: many(tournamentAdmins),
+}));
+
+export const tournamentAdmins = pgTable(
+  "tournament_admins",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id),
+    tournamentId: text("tournament_id")
+      .notNull()
+      .references(() => tournaments.id),
+    accepted: boolean("accepted").notNull().default(false),
+    invitedAt: timestamp("invited_at").defaultNow(),
+    invitedBy: text("user_id")
+      .notNull()
+      .references(() => users.id),
+  },
+  (utt) => ({
+    pk: primaryKey(utt.userId, utt.tournamentId),
+  }),
+);
+
+export const tournamentAdminRelations = relations(
+  tournamentAdmins,
+  ({ one, many }) => ({
+    tournaments: one(tournaments, {
+      fields: [tournamentAdmins.tournamentId],
+      references: [tournaments.id],
+    }),
+    users: one(users, {
+      fields: [tournamentAdmins.userId],
+      references: [users.id],
+    }),
+  }),
+);
+
 export const schedule = pgTable("schedule", {
   id: text("id")
     .primaryKey()
@@ -89,6 +138,14 @@ export const schedule = pgTable("schedule", {
   currentRound: integer("current_round"),
   totalRounds: integer("total_rounds"),
 });
+
+export const scheduleRelations = relations(schedule, ({ one, many }) => ({
+  tournament: one(tournaments, {
+    fields: [schedule.tournamentId],
+    references: [tournaments.id],
+  }),
+  scheduleToMatches: many(scheduleToMatches),
+}));
 
 export const scheduleToMatches = pgTable(
   "schedule_to_matches",
@@ -111,6 +168,32 @@ export const scheduleToMatches = pgTable(
   }),
 );
 
+export const scheduleToMatchesRelations = relations(
+  scheduleToMatches,
+  ({ one, many }) => ({
+    schedule: one(schedule, {
+      fields: [scheduleToMatches.scheduleId],
+      references: [schedule.id],
+    }),
+    matchId: one(matches, {
+      fields: [scheduleToMatches.matchId],
+      references: [matches.id],
+    }),
+    teamAId: one(teams, {
+      fields: [scheduleToMatches.teamAId],
+      references: [teams.id],
+    }),
+    teamBId: one(teams, {
+      fields: [scheduleToMatches.teamBId],
+      references: [teams.id],
+    }),
+    parentMatchId: one(matches, {
+      fields: [scheduleToMatches.parentMatchId],
+      references: [matches.id],
+    }),
+  }),
+);
+
 export const teams = pgTable("teams", {
   id: text("id")
     .primaryKey()
@@ -125,6 +208,15 @@ export const teams = pgTable("teams", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   eliminated: boolean("eliminated").notNull().default(false),
 });
+
+export const teamRelations = relations(teams, ({ one, many }) => ({
+  matches: many(matches),
+  tournaments: one(tournaments, {
+    fields: [teams.tournamentId],
+    references: [tournaments.id],
+  }),
+  userToTeams: many(userToTeams),
+}));
 
 export const userToTeams = pgTable(
   "users_to_teams",
@@ -144,6 +236,21 @@ export const userToTeams = pgTable(
   }),
 );
 
+export const userToTeamsRelations = relations(userToTeams, ({ one }) => ({
+  teams: one(teams, {
+    fields: [userToTeams.teamId],
+    references: [teams.id],
+  }),
+  users: one(users, {
+    fields: [userToTeams.userId],
+    references: [users.id],
+  }),
+  tournaments: one(tournaments, {
+    fields: [userToTeams.tournamentId],
+    references: [tournaments.id],
+  }),
+}));
+
 export const matches = pgTable("match", {
   id: text("id")
     .primaryKey()
@@ -160,3 +267,11 @@ export const matches = pgTable("match", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   completedAt: timestamp("completed_at"),
 });
+
+export const matchRelations = relations(matches, ({ one, many }) => ({
+  tournament: one(tournaments, {
+    fields: [matches.tournamentId],
+    references: [tournaments.id],
+  }),
+  scheduleToMatches: many(scheduleToMatches),
+}));
