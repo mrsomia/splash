@@ -102,7 +102,7 @@ export const tournamentAdmins = pgTable(
       .references(() => tournaments.id),
     accepted: boolean("accepted").notNull().default(false),
     invitedAt: timestamp("invited_at").defaultNow(),
-    invitedBy: text("user_id")
+    invitedBy: text("invited_by")
       .notNull()
       .references(() => users.id),
   },
