@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest",
     "db:push": "drizzle-kit push:pg",
     "db:mig:gen": "drizzle-kit generate:pg",
     "db:studio": "drizzle-kit studio"
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "drizzle-kit": "^0.19.13",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "vitest": "^0.34.4"
   }
 }
