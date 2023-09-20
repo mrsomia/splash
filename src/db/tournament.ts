@@ -30,3 +30,11 @@ export async function createTournamentFromEmail({
   });
   return tournament;
 }
+
+export async function getTournamentFromId(id: string) {
+  const [tournament] = await db
+    .select()
+    .from(tournaments)
+    .where(eq(tournaments.id, id));
+  return tournament;
+}
