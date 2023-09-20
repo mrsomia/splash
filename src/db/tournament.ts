@@ -22,11 +22,11 @@ export async function createTournamentFromEmail({
       .values({ name: tournamentName, startTime })
       .returning();
 
-    const [newTournament] = await tx
+    await tx
       .insert(tournamentAdmins)
       .values({ userId: user.id, tournamentId: tourney.id, accepted: true })
       .returning();
-    return newTournament;
+    return tourney;
   });
   return tournament;
 }

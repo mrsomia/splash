@@ -3,6 +3,7 @@
 import { createTournamentFromEmail } from "@/db/tournament";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export async function createTournament(
   tournamentName: string,
@@ -26,5 +27,5 @@ export async function createTournament(
     startTime,
     tournamentName,
   });
-  return tournament;
+  redirect(`/tournament/${tournament.id}`);
 }
