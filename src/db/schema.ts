@@ -24,7 +24,7 @@ export const users = pgTable("user", {
 });
 
 export const userRealtions = relations(users, ({ one, many }) => ({
-  tournaments: many(users),
+  tournamentAdmins: many(tournamentAdmins),
   userToTeams: many(userToTeams),
 }));
 
@@ -173,21 +173,25 @@ export const scheduleToMatchesRelations = relations(
       fields: [scheduleToMatches.scheduleId],
       references: [schedule.id],
     }),
-    matchId: one(matches, {
+    match: one(matches, {
       fields: [scheduleToMatches.matchId],
       references: [matches.id],
+      relationName: "match",
     }),
-    teamAId: one(teams, {
+    teamA: one(teams, {
       fields: [scheduleToMatches.teamAId],
       references: [teams.id],
+      relationName: "teamA",
     }),
-    teamBId: one(teams, {
+    teamB: one(teams, {
       fields: [scheduleToMatches.teamBId],
       references: [teams.id],
+      relationName: "teamB",
     }),
-    parentMatchId: one(matches, {
+    parentMatch: one(matches, {
       fields: [scheduleToMatches.parentMatchId],
       references: [matches.id],
+      relationName: "parentMatch",
     }),
   }),
 );
@@ -208,11 +212,12 @@ export const teams = pgTable("teams", {
 });
 
 export const teamRelations = relations(teams, ({ one, many }) => ({
-  matches: many(matches),
   tournaments: one(tournaments, {
     fields: [teams.tournamentId],
     references: [tournaments.id],
   }),
+  scheduledAsTeamA: many(scheduleToMatches, { relationName: "teamA" }),
+  scheduledAsTeamB: many(scheduleToMatches, { relationName: "teamB" }),
   userToTeams: many(userToTeams),
 }));
 
@@ -271,5 +276,6 @@ export const matchRelations = relations(matches, ({ one, many }) => ({
     fields: [matches.tournamentId],
     references: [tournaments.id],
   }),
-  scheduleToMatches: many(scheduleToMatches),
+  schedule: many(scheduleToMatches, { relationName: "match" }),
+  parent: many(scheduleToMatches, { relationName: "parentMatch" }),
 }));
