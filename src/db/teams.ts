@@ -9,3 +9,17 @@ export async function getTeamsForTournament(id: string) {
     .where(eq(teams.tournamentId, id));
   return foundTeams;
 }
+
+export async function createTeam({
+  tournamentId,
+  teamName,
+}: {
+  tournamentId: string;
+  teamName: string;
+}) {
+  const [team] = await db
+    .insert(teams)
+    .values({ tournamentId, name: teamName })
+    .returning();
+  return team;
+}
