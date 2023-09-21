@@ -1,19 +1,16 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 import { createTournament } from "@/actions/tournament";
+import { getEpochFromDateAndTime } from "@/lib/dates";
 
 export default function NewTournamentForm() {
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [startTime, setStartTime] = useState(format(new Date(), "HH:mm"));
 
-  const epochStart = parse(
-    `${startDate} ${startTime}`,
-    "yyyy-MM-dd HH:mm",
-    new Date(),
-  ).getTime();
+  const epochStart = getEpochFromDateAndTime(startDate, startTime);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     // TODO: Validation
