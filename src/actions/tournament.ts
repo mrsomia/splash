@@ -29,3 +29,8 @@ export async function createTournament(
   });
   redirect(`/tournament/${tournament.id}`);
 }
+export async function scheduleTournament(id: string) {
+  console.log(`scheduling ${id}`);
+  redirect(`/tournament/${id}/schedule`);
+  //TODO: Write schedule algorithm
+}

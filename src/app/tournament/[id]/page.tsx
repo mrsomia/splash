@@ -3,6 +3,7 @@ import { getTeamsForTournament } from "@/db/teams";
 import { Suspense } from "react";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
+import ScheduleButton from "./ScheduleButton";
 
 type PageProps = {
   params: {
@@ -15,9 +16,13 @@ export default async function TournamentPage({ params }: PageProps) {
   const tournament = await getTournamentFromId(params.id);
   const teams = await getTeamsForTournament(params.id);
   const start = new Date(tournament.startTime);
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-8">
-      <Link href={`/tournament/${tournament.id}/signup`}>signup</Link>
+      <div className="flex gap-4">
+        <Link href={`/tournament/${tournament.id}/signup`}>signup</Link>
+        <ScheduleButton id={params.id} />
+      </div>
       <Suspense fallback={<Spinner />}>
         <h1>{tournament.name}</h1>
         <span>{`starts at ${start.toLocaleTimeString()} on ${start.toLocaleDateString()}`}</span>
