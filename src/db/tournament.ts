@@ -38,3 +38,23 @@ export async function getTournamentFromId(id: string) {
     .where(eq(tournaments.id, id));
   return tournament;
 }
+
+export async function getTournamentsFromEmail(email: string, limit = 0) {
+  const tournamentsWhereUserIsAdmin = await db
+    .select({
+      id: tournaments.id,
+      name: tournaments.name,
+      winner: tournaments.winner,
+      createdAt: tournaments.createdAt,
+      startTime: tournaments.startTime,
+      completedAt: tournaments.completedAt,
+    })
+    .from(users)
+    .where(eq(users.email, email))
+    .leftJoin(tournamentAdmins, eq(users.id, tournamentAdmins.userId))
+    .leftJoin(tournaments, eq(tournaments.id, tournamentAdmins.tournamentId))
+    .orderBy(tournaments.startTime)
+    .limit(limit);
+
+  return tournamentsWhereUserIsAdmin;
+}
