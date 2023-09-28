@@ -1,4 +1,5 @@
 import { getTournamentFromId } from "@/db/tournament";
+import { getTeamsForTournament } from "@/db/teams";
 import { Suspense } from "react";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
@@ -12,7 +13,7 @@ type PageProps = {
 export default async function TournamentPage({ params }: PageProps) {
   console.log(params);
   const tournament = await getTournamentFromId(params.id);
-  console.log(tournament);
+  const teams = await getTeamsForTournament(params.id);
   const start = new Date(tournament.startTime);
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-8">
@@ -20,6 +21,9 @@ export default async function TournamentPage({ params }: PageProps) {
       <Suspense fallback={<Spinner />}>
         <h1>{tournament.name}</h1>
         <span>{`starts at ${start.toLocaleTimeString()} on ${start.toLocaleDateString()}`}</span>
+        {teams.length ? (
+          <p>{`${teams.length} team${teams.length !== 1 ? "s" : ""}`}</p>
+        ) : null}
       </Suspense>
     </main>
   );
