@@ -73,12 +73,12 @@ export async function storeTeamSchedule(
   await db.transaction(async (tx) => {
     let round = 1;
     // Last game of the round
-    let endIdx = getUpperFactorOf2(round) - 1;
+    let endIdx = getUpperFactorOf2(2 ** round) - 1;
     const createdMatches: (typeof matches.$inferSelect)[] = [];
     for (let i = 0; i < randomSchedule.length; i++) {
       if (i == endIdx) {
         round = round + 1;
-        endIdx = getUpperFactorOf2(round) - 1;
+        endIdx = getUpperFactorOf2(2 ** round) - 1;
       }
       const [match] = await tx
         .insert(matches)
