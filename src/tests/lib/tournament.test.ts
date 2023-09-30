@@ -1,6 +1,7 @@
 import {
   createRandomeScheduleForTeams,
   getNumberOfRounds,
+  getStartIndex,
   getUpperFactorOf2,
 } from "../../lib/tournament";
 import { expect, test, describe } from "vitest";
@@ -26,42 +27,53 @@ function createListofTeams({ id, amount }: { id: string; amount: number }) {
   return a;
 }
 
-describe("Gets the right factor of 2", () => {
-  const lens = [
-    [1, 2],
-    [2, 2],
-    [3, 4],
-    [4, 4],
-    [6, 8],
-    [8, 8],
-    [12, 16],
-    [16, 16],
-    [24, 32],
-    [32, 32],
-    [33, 64],
-    [64, 64],
-    [65, 128],
-  ];
-  for (const len of lens) {
-    test(`${len[0]}`, () => {
+describe("Util functions", () => {
+  test("Gets the right factor of 2", () => {
+    const lens = [
+      [1, 2],
+      [2, 2],
+      [3, 4],
+      [4, 4],
+      [6, 8],
+      [8, 8],
+      [12, 16],
+      [16, 16],
+      [24, 32],
+      [32, 32],
+      [33, 64],
+      [64, 64],
+      [65, 128],
+    ];
+    for (const len of lens) {
       expect(getUpperFactorOf2(len[0])).toBe(len[1]);
-    });
-  }
-});
+    }
+  });
 
-describe("Gets the right number of rounds", () => {
-  const lens = [
-    [2, 1],
-    [4, 2],
-    [8, 3],
-    [16, 4],
-    [32, 5],
-  ];
-  for (const len of lens) {
-    test(`${len[0]}`, () => {
+  test("Gets the right number of rounds", () => {
+    const lens = [
+      [2, 1],
+      [4, 2],
+      [8, 3],
+      [16, 4],
+      [32, 5],
+    ];
+    for (const len of lens) {
       expect(getNumberOfRounds(len[0])).toBe(len[1]);
-    });
-  }
+    }
+  });
+
+  test("Gets the correct start index for the last round", () => {
+    const lens = [
+      [2, 0],
+      [4, 1],
+      [8, 3],
+      [16, 7],
+      [32, 15],
+    ];
+    for (const len of lens) {
+      expect(getStartIndex(len[0])).toBe(len[1]);
+    }
+  });
 });
 
 describe("Generates Schedule", () => {

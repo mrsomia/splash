@@ -36,7 +36,7 @@ export function createScheduleForShuffledTeams(teams: teamsSelect[]) {
     .fill(null)
     .map((_) => [null, null]);
 
-  const startIdx = result.length - expectedTeams / 2;
+  const startIdx = getStartIndex(expectedTeams);
   const gamesInLastRound = 2 ** (numberOfRounds - 1);
   for (let i = 0; i < teams.length; i++) {
     const team = teams[i];
@@ -46,6 +46,9 @@ export function createScheduleForShuffledTeams(teams: teamsSelect[]) {
       result[startIdx + (i - gamesInLastRound)][1] = team.id;
     }
   }
-  console.log(result);
   return result;
+}
+
+export function getStartIndex(numberOfExpectedTeams: number) {
+  return numberOfExpectedTeams - 1 - numberOfExpectedTeams / 2;
 }
