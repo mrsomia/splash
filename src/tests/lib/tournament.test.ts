@@ -5,27 +5,7 @@ import {
   getUpperFactorOf2,
 } from "../../lib/tournament";
 import { expect, test, describe } from "vitest";
-import { type teamsSelect } from "../../db/schema";
 import { faker } from "@faker-js/faker";
-
-function createMockTeamForTournament(tournamentId: string): teamsSelect {
-  return {
-    id: faker.string.nanoid(),
-    name: faker.word.words(2),
-    createdAt: faker.date.recent(),
-    eliminated: false,
-    tournamentId,
-  };
-}
-
-function createListofTeams({ id, amount }: { id: string; amount: number }) {
-  const a = [];
-  for (let i = 0; i < amount; i++) {
-    const team = createMockTeamForTournament(id);
-    a.push(team);
-  }
-  return a;
-}
 
 describe("Util functions", () => {
   test("Gets the right factor of 2", () => {
@@ -92,7 +72,7 @@ describe("Generates Schedule", () => {
         expect(match).toStrictEqual([null, null]);
       }
       const lastRound = schedule.slice(startIdx);
-      const foundTeamOrder: any[] = [];
+      const foundTeamOrder: (string | null)[] = [];
       lastRound.forEach((x) => {
         foundTeamOrder.push(x[0]);
       });

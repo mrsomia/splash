@@ -1,5 +1,4 @@
-import { type teamsSelect } from "@/db/schema";
-import * as _ from "lodash";
+import _ from "lodash";
 
 export function getUpperFactorOf2(amount: number) {
   let i = 2;
@@ -24,6 +23,10 @@ export function createRandomeScheduleForTeams(t: string[]) {
   return createScheduleForShuffledTeams(teams);
 }
 
+export function getStartIndex(numberOfExpectedTeams: number) {
+  return numberOfExpectedTeams - 1 - numberOfExpectedTeams / 2;
+}
+
 export function createScheduleForShuffledTeams(teams: string[]) {
   const expectedTeams = getUpperFactorOf2(teams.length);
   const numberOfRounds = getNumberOfRounds(expectedTeams);
@@ -31,8 +34,7 @@ export function createScheduleForShuffledTeams(teams: string[]) {
 
   // Change this type if changing what to return
   // e.g. team id or team object
-  type nullOrTeam = null | string;
-  const result: [nullOrTeam, nullOrTeam][] = new Array(numberOfGames)
+  const result: [null | string, null | string][] = new Array(numberOfGames)
     .fill(null)
     .map((_) => [null, null]);
 
@@ -47,8 +49,4 @@ export function createScheduleForShuffledTeams(teams: string[]) {
     }
   }
   return result;
-}
-
-export function getStartIndex(numberOfExpectedTeams: number) {
-  return numberOfExpectedTeams - 1 - numberOfExpectedTeams / 2;
 }
