@@ -196,6 +196,8 @@ export const scheduleToMatchesRelations = relations(
   }),
 );
 
+export type teamsSelect = typeof teams.$inferSelect;
+
 export const teams = pgTable("teams", {
   id: text("id")
     .primaryKey()
