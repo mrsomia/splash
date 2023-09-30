@@ -19,12 +19,12 @@ export function getNumberOfRounds(amount: number) {
   return count;
 }
 
-export function createRandomeScheduleForTeams(t: teamsSelect[]) {
+export function createRandomeScheduleForTeams(t: string[]) {
   const teams = _.shuffle(t);
   return createScheduleForShuffledTeams(teams);
 }
 
-export function createScheduleForShuffledTeams(teams: teamsSelect[]) {
+export function createScheduleForShuffledTeams(teams: string[]) {
   const expectedTeams = getUpperFactorOf2(teams.length);
   const numberOfRounds = getNumberOfRounds(expectedTeams);
   const numberOfGames = expectedTeams - 1;
@@ -41,9 +41,9 @@ export function createScheduleForShuffledTeams(teams: teamsSelect[]) {
   for (let i = 0; i < teams.length; i++) {
     const team = teams[i];
     if (i < gamesInLastRound) {
-      result[startIdx + i][0] = team.id;
+      result[startIdx + i][0] = team;
     } else {
-      result[startIdx + (i - gamesInLastRound)][1] = team.id;
+      result[startIdx + (i - gamesInLastRound)][1] = team;
     }
   }
   return result;

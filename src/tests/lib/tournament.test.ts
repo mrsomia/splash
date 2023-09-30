@@ -80,9 +80,9 @@ describe("Generates Schedule", () => {
   const amounts = [6, 8, 9, 15, 23, 28, 33, 40, 42];
   for (const amount of amounts) {
     test(`${amount} teams`, () => {
-      const tID = faker.string.nanoid();
-      const teams = createListofTeams({ id: tID, amount });
-      const teamIds = teams.map((t) => t.id);
+      const teams = new Array(amount)
+        .fill(null)
+        .map((_) => faker.string.nanoid());
       const schedule = createScheduleForShuffledTeams(teams);
       const expectedTeams = getUpperFactorOf2(amount);
       const startIdx = getStartIndex(expectedTeams);
@@ -100,7 +100,7 @@ describe("Generates Schedule", () => {
         foundTeamOrder.push(x[1]);
       });
       const nulls = new Array(expectedTeams - amount).fill(null);
-      expect(foundTeamOrder).toEqual(teamIds.concat(nulls));
+      expect(foundTeamOrder).toEqual(teams.concat(nulls));
     });
   }
 });
