@@ -1,6 +1,11 @@
 import { db } from "@/db/index";
-import { tournamentAdmins, tournaments, users } from "./schema";
+import { tournamentAdmins, tournaments, users, matches } from "./schema";
 import { eq } from "drizzle-orm";
+import {
+  createRandomeScheduleForTeams,
+  getNumberOfRounds,
+  getUpperFactorOf2,
+} from "@/lib/tournament";
 
 export async function createTournamentFromEmail({
   userEmail,
@@ -57,4 +62,50 @@ export async function getTournamentsFromEmail(email: string, limit = 0) {
     .limit(limit);
 
   return tournamentsWhereUserIsAdmin;
+}
+
+export async function storeTeamSchedule(
+  randomSchedule: ReturnType<typeof createRandomeScheduleForTeams>,
+  tournamentId: string,
+) {
+  // const expectedTeams = randomSchedule.length + 1;
+  // const numberOfRounds = getNumberOfRounds(expectedTeams);
+  await db.transaction(async (tx) => {
+    let round = 1;
+    // Last game of the round
+    let endIdx = getUpperFactorOf2(round) - 1;
+    const createdMatches: (typeof matches.$inferSelect)[] = [];
+    for (let i = 0; i < randomSchedule.length; i++) {
+      if (i == endIdx) {
+        round = round + 1;
+        endIdx = getUpperFactorOf2(round) - 1;
+      }
+      const [match] = await tx
+        .insert(matches)
+        .values({
+          tournamentId,
+          teamAId: randomSchedule[i][0],
+          teamBId: randomSchedule[i][1],
+          round,
+        })
+        .returning();
+      createdMatches.push(match);
+    }
+
+    for (let i = 1; i < createdMatches.length; i++) {
+      const parentMatchIdx = Math.floor((i + 1) / 2) - 1;
+      const parentId = createdMatches[parentMatchIdx].id;
+      const [updatedMatch] = await tx
+        .update(matches)
+        .set({
+          parentId,
+        })
+        .where(eq(matches.id, createdMatches[i].id))
+        .returning();
+
+      createdMatches[i] = updatedMatch;
+    }
+
+    return createdMatches;
+  });
 }
