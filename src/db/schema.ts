@@ -7,6 +7,7 @@ import {
   varchar,
   boolean,
   unique,
+  AnyPgColumn,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { nanoid } from "nanoid";
@@ -87,7 +88,6 @@ export const tournaments = pgTable("tournament", {
 export const tournamentRelations = relations(tournaments, ({ one, many }) => ({
   matches: many(matches),
   teams: many(teams),
-  schedule: one(schedule),
   tournamentAdmins: many(tournamentAdmins),
 }));
 
@@ -123,79 +123,6 @@ export const tournamentAdminRelations = relations(
   }),
 );
 
-export const schedule = pgTable("schedule", {
-  id: text("id")
-    .primaryKey()
-    .notNull()
-    .$defaultFn(() => nanoid()),
-  tournamentId: text("tournament_id")
-    .notNull()
-    .references(() => tournaments.id, {
-      onDelete: "cascade",
-    }),
-  currentRound: integer("current_round"),
-  totalRounds: integer("total_rounds"),
-});
-
-export const scheduleRelations = relations(schedule, ({ one, many }) => ({
-  tournament: one(tournaments, {
-    fields: [schedule.tournamentId],
-    references: [tournaments.id],
-  }),
-  scheduleToMatches: many(scheduleToMatches),
-}));
-
-export const scheduleToMatches = pgTable(
-  "schedule_to_matches",
-  {
-    scheduleId: text("schedule_id")
-      .notNull()
-      .references(() => schedule.id),
-    matchId: text("match_id")
-      .notNull()
-      .references(() => matches.id),
-    round: integer("round").notNull(),
-    teamAId: text("team_a_id").references(() => teams.id),
-    teamBId: text("team_b_id").references(() => teams.id),
-    parentMatchId: text("parent_match_id").references(() => matches.id),
-  },
-  (stm) => ({
-    pk: primaryKey(stm.scheduleId, stm.matchId),
-    unq1: unique().on(stm.round, stm.scheduleId, stm.teamAId),
-    unq2: unique().on(stm.round, stm.scheduleId, stm.teamBId),
-  }),
-);
-
-export const scheduleToMatchesRelations = relations(
-  scheduleToMatches,
-  ({ one, many }) => ({
-    schedule: one(schedule, {
-      fields: [scheduleToMatches.scheduleId],
-      references: [schedule.id],
-    }),
-    match: one(matches, {
-      fields: [scheduleToMatches.matchId],
-      references: [matches.id],
-      relationName: "match",
-    }),
-    teamA: one(teams, {
-      fields: [scheduleToMatches.teamAId],
-      references: [teams.id],
-      relationName: "teamA",
-    }),
-    teamB: one(teams, {
-      fields: [scheduleToMatches.teamBId],
-      references: [teams.id],
-      relationName: "teamB",
-    }),
-    parentMatch: one(matches, {
-      fields: [scheduleToMatches.parentMatchId],
-      references: [matches.id],
-      relationName: "parentMatch",
-    }),
-  }),
-);
-
 export type teamsSelect = typeof teams.$inferSelect;
 
 export const teams = pgTable("teams", {
@@ -209,6 +136,8 @@ export const teams = pgTable("teams", {
     .references(() => tournaments.id, {
       onDelete: "cascade",
     }),
+  totalRounds: integer("total_rounds"),
+  current_round: integer("current_round"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   eliminated: boolean("eliminated").notNull().default(false),
 });
@@ -218,8 +147,8 @@ export const teamRelations = relations(teams, ({ one, many }) => ({
     fields: [teams.tournamentId],
     references: [tournaments.id],
   }),
-  scheduledAsTeamA: many(scheduleToMatches, { relationName: "teamA" }),
-  scheduledAsTeamB: many(scheduleToMatches, { relationName: "teamB" }),
+  // scheduledAsTeamA: many(matches, { relationname: "teama" }),
+  // scheduledasteamb: many(matches, { relationName: "teamB" }),
   userToTeams: many(userToTeams),
 }));
 
@@ -256,28 +185,42 @@ export const userToTeamsRelations = relations(userToTeams, ({ one }) => ({
   }),
 }));
 
-export const matches = pgTable("match", {
-  id: text("id")
-    .primaryKey()
-    .notNull()
-    .$defaultFn(() => nanoid()),
-  teamAScore: integer("team_a_score").default(0),
-  teamBScore: integer("team_b_score").default(0),
-  tournamentId: text("tournament_id")
-    .notNull()
-    .references(() => tournaments.id, {
-      onDelete: "cascade",
-    }),
-  winner: varchar("winner", { enum: ["team1", "team2"] }),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  completedAt: timestamp("completed_at"),
-});
+export const matches = pgTable(
+  "match",
+  {
+    id: text("id")
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => nanoid()),
+    teamAScore: integer("team_a_score").default(0),
+    teamBScore: integer("team_b_score").default(0),
+    round: integer("round").notNull(),
+    teamAId: text("teamA_id").references(() => teams.id),
+    teamBId: text("teamB_id").references(() => teams.id),
+    tournamentId: text("tournament_id")
+      .notNull()
+      .references(() => tournaments.id, {
+        onDelete: "cascade",
+      }),
+    winner: varchar("winner", { enum: ["team1", "team2"] }),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    completedAt: timestamp("completed_at"),
+    parentId: text("parent_id").references((): AnyPgColumn => matches.id),
+  },
+  (matches) => ({
+    unq1: unique().on(matches.round, matches.tournamentId, matches.teamAId),
+    unq2: unique().on(matches.round, matches.tournamentId, matches.teamBId),
+  }),
+);
 
 export const matchRelations = relations(matches, ({ one, many }) => ({
   tournament: one(tournaments, {
     fields: [matches.tournamentId],
     references: [tournaments.id],
   }),
-  schedule: many(scheduleToMatches, { relationName: "match" }),
-  parent: many(scheduleToMatches, { relationName: "parentMatch" }),
+  // parent: one(matches, {
+  //   fields: [matches.parentId],
+  //   references: [matches.id],
+  //   relationName: "parent",
+  // }),
 }));
