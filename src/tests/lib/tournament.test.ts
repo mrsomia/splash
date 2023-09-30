@@ -1,5 +1,5 @@
 import {
-  createRandomeScheduleForTeams,
+  createScheduleForShuffledTeams,
   getNumberOfRounds,
   getStartIndex,
   getUpperFactorOf2,
@@ -77,11 +77,30 @@ describe("Util functions", () => {
 });
 
 describe("Generates Schedule", () => {
-  test("6 teams", () => {
-    // TODO: test schedule is correct
-    const tID = faker.string.nanoid();
-    const teams = createListofTeams({ id: tID, amount: 9 });
-    const schedule = createRandomeScheduleForTeams(teams);
-    console.log(schedule);
-  });
+  const amounts = [6, 8, 9, 15, 23, 28, 33, 40, 42];
+  for (const amount of amounts) {
+    test(`${amount} teams`, () => {
+      const tID = faker.string.nanoid();
+      const teams = createListofTeams({ id: tID, amount });
+      const teamIds = teams.map((t) => t.id);
+      const schedule = createScheduleForShuffledTeams(teams);
+      const expectedTeams = getUpperFactorOf2(amount);
+      const startIdx = getStartIndex(expectedTeams);
+
+      const emptyRounds = schedule.slice(0, startIdx);
+      for (const match of emptyRounds) {
+        expect(match).toStrictEqual([null, null]);
+      }
+      const lastRound = schedule.slice(startIdx);
+      const foundTeamOrder: any[] = [];
+      lastRound.forEach((x) => {
+        foundTeamOrder.push(x[0]);
+      });
+      lastRound.forEach((x) => {
+        foundTeamOrder.push(x[1]);
+      });
+      const nulls = new Array(expectedTeams - amount).fill(null);
+      expect(foundTeamOrder).toEqual(teamIds.concat(nulls));
+    });
+  }
 });
