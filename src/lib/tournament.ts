@@ -19,33 +19,30 @@ export function getNumberOfRounds(amount: number) {
 }
 
 export function createRandomeScheduleForTeams(t: string[]) {
-  const teams = _.shuffle(t);
-  return createScheduleForShuffledTeams(teams);
+  const teamIds = _.shuffle(t);
+  return createScheduleForShuffledTeams(teamIds);
 }
 
 export function getStartIndex(numberOfExpectedTeams: number) {
   return numberOfExpectedTeams - 1 - numberOfExpectedTeams / 2;
 }
 
-export function createScheduleForShuffledTeams(teams: string[]) {
-  const expectedTeams = getUpperFactorOf2(teams.length);
+export function createScheduleForShuffledTeams(teamIds: string[]) {
+  const expectedTeams = getUpperFactorOf2(teamIds.length);
   const numberOfRounds = getNumberOfRounds(expectedTeams);
   const numberOfGames = expectedTeams - 1;
 
-  // Change this type if changing what to return
-  // e.g. team id or team object
   const result: [null | string, null | string][] = new Array(numberOfGames)
     .fill(null)
     .map((_) => [null, null]);
 
   const startIdx = getStartIndex(expectedTeams);
   const gamesInLastRound = 2 ** (numberOfRounds - 1);
-  for (let i = 0; i < teams.length; i++) {
-    const team = teams[i];
+  for (let i = 0; i < teamIds.length; i++) {
     if (i < gamesInLastRound) {
-      result[startIdx + i][0] = team;
+      result[startIdx + i][0] = teamIds[i];
     } else {
-      result[startIdx + (i - gamesInLastRound)][1] = team;
+      result[startIdx + (i - gamesInLastRound)][1] = teamIds[i];
     }
   }
   return result;
