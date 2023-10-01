@@ -77,7 +77,7 @@ export async function updateMatchWinner({
       }
     } else {
       tx.update(tournaments)
-        .set({ winner: teamId })
+        .set({ winner: teamId, completedAt: new Date() })
         .where(eq(tournaments.id, match.tournamentId));
     }
   });
