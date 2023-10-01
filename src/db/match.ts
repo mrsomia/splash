@@ -26,3 +26,59 @@ export async function getMatchDetails(id: string) {
   return match;
 }
 
+export async function updateMatchWinner({
+  matchId,
+  teamId,
+}: {
+  matchId: string;
+  teamId: string;
+}) {
+  await db.transaction(async (tx) => {
+    const [match] = await tx
+      .select()
+      .from(matches)
+      .where(eq(matches.id, matchId));
+    if (match.teamAId == teamId) {
+      await tx
+        .update(matches)
+        .set({
+          winner: "teamA",
+          completedAt: new Date(),
+        })
+        .where(eq(matches.id, matchId));
+    } else if (match.teamBId == teamId) {
+      await tx
+        .update(matches)
+        .set({
+          winner: "teamB",
+          completedAt: new Date(),
+        })
+        .where(eq(matches.id, matchId));
+    }
+
+    if (match.parentId) {
+      // Not the Final
+      const [parent] = await tx
+        .select()
+        .from(matches)
+        .where(eq(matches.id, match.parentId));
+      if (parent.teamAId == null) {
+        await tx
+          .update(matches)
+          .set({ teamAId: teamId })
+          .where(eq(matches.id, parent.id));
+      } else if (parent.teamBId == null) {
+        await tx
+          .update(matches)
+          .set({ teamBId: teamId })
+          .where(eq(matches.id, parent.id));
+      } else {
+        throw new Error("parent already has 2 teams");
+      }
+    } else {
+      tx.update(tournaments)
+        .set({ winner: teamId })
+        .where(eq(tournaments.id, match.tournamentId));
+    }
+  });
+}
