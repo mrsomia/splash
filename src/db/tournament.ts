@@ -1,11 +1,12 @@
 import { db } from "@/db/index";
-import { tournamentAdmins, tournaments, users, matches } from "./schema";
-import { eq } from "drizzle-orm";
+import { tournamentAdmins, tournaments, users, matches, teams } from "./schema";
+import { eq, asc } from "drizzle-orm";
 import {
   createRandomeScheduleForTeams,
   getNumberOfRounds,
   getUpperFactorOf2,
 } from "@/lib/tournament";
+import { alias } from "drizzle-orm/pg-core";
 
 export async function createTournamentFromEmail({
   userEmail,
@@ -172,4 +173,38 @@ export async function updateAllMatchWinners(tournamentId: string) {
       }
     }
   });
+}
+
+export async function getMatchesForTournament(id: string) {
+  const teamA = alias(teams, "teamA");
+  const teamB = alias(teams, "teamB");
+  const games = await db
+    .select({
+      id: matches.id,
+      teamAId: matches.teamAId,
+      teamBId: matches.teamBId,
+      winner: matches.winner,
+      round: matches.round,
+      matchNumber: matches.matchNumber,
+      parent: matches.parentId,
+      teamA: teamA.name,
+      teamB: teamB.name,
+    })
+    .from(matches)
+    .where(eq(matches.tournamentId, id))
+    .fullJoin(teamA, eq(matches.teamAId, teamA.id))
+    .fullJoin(teamB, eq(matches.teamBId, teamB.id))
+    .orderBy(asc(matches.matchNumber));
+  return games;
+}
+
+export async function getMatchesForTournamentByRounds(id: string) {
+  const games = await getMatchesForTournament(id);
+  const rounds = [];
+  const totalRounds = getNumberOfRounds(games.length + 1);
+  for (let i = 1; i <= totalRounds; i++) {
+    const roundOfGames = games.filter((game) => game.round == i);
+    rounds.push(roundOfGames);
+  }
+  return rounds;
 }
