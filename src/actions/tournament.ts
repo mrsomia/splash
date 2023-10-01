@@ -9,6 +9,7 @@ import {
 import { authOptions } from "@/lib/auth";
 import { createRandomeScheduleForTeams } from "@/lib/tournament";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createTournament(
@@ -45,5 +46,6 @@ export async function scheduleTournament(id: string) {
   await updateAllMatchWinners(id);
   // TODO : update torunament to have number of rounds
 
-  // redirect(`/tournament/${id}/schedule`);
+  revalidatePath(`/tournament/${id}`);
+  redirect(`/tournament/${id}/schedule`);
 }
