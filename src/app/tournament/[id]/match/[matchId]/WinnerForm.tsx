@@ -19,10 +19,6 @@ export default function WinnerForm({ match }: WinnerFormProps) {
       console.error("Please set a winner");
       return;
     }
-    if (!match.id) {
-      console.error("No match Id found");
-      return;
-    }
     console.log({ matchId: match.id, teamId: selectValue });
     setMatchWinner({
       matchId: match.id,

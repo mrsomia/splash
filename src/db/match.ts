@@ -21,8 +21,8 @@ export async function getMatchDetails(id: string) {
     })
     .from(matches)
     .where(eq(matches.id, id))
-    .fullJoin(teamA, eq(teamA.id, matches.teamAId))
-    .fullJoin(teamB, eq(teamB.id, matches.teamBId));
+    .leftJoin(teamA, eq(teamA.id, matches.teamAId))
+    .leftJoin(teamB, eq(teamB.id, matches.teamBId));
   return match;
 }
 
