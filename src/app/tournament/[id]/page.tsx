@@ -1,4 +1,4 @@
-import { getTournamentFromId } from "@/db/tournament";
+import { getMatchesForTournament, getTournamentFromId } from "@/db/tournament";
 import { getTeamsForTournament } from "@/db/teams";
 import { Suspense } from "react";
 import Spinner from "@/components/Spinner";
@@ -16,12 +16,17 @@ export default async function TournamentPage({ params }: PageProps) {
   const tournament = await getTournamentFromId(params.id);
   const teams = await getTeamsForTournament(params.id);
   const start = new Date(tournament.startTime);
+  const games = await getMatchesForTournament(params.id);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-8">
       <div className="flex gap-4">
         <Link href={`/tournament/${tournament.id}/signup`}>signup</Link>
-        <ScheduleButton id={params.id} />
+        {games.length ? (
+          <Link href={`/tournament/${tournament.id}/schedule`}>Schedule</Link>
+        ) : (
+          <ScheduleButton id={params.id} />
+        )}
       </div>
       <Suspense fallback={<Spinner />}>
         <h1>{tournament.name}</h1>
