@@ -8,9 +8,9 @@ export function getUpperFactorOf2(amount: number) {
   return i;
 }
 
-export function getNumberOfRounds(amount: number) {
+export function getNumberOfRounds(numberOfExpectedTeams: number) {
   let count = 0;
-  let current = amount;
+  let current = numberOfExpectedTeams;
   while (current > 1) {
     current = current / 2;
     count++;
