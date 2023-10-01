@@ -1,7 +1,11 @@
 "use server";
 
 import { getTeamsForTournament } from "@/db/teams";
-import { createTournamentFromEmail, storeTeamSchedule } from "@/db/tournament";
+import {
+  createTournamentFromEmail,
+  storeTeamSchedule,
+  updateAllMatchWinners,
+} from "@/db/tournament";
 import { authOptions } from "@/lib/auth";
 import { createRandomeScheduleForTeams } from "@/lib/tournament";
 import { getServerSession } from "next-auth";
@@ -38,6 +42,7 @@ export async function scheduleTournament(id: string) {
   const schedule = createRandomeScheduleForTeams(teamIds);
   console.log(schedule);
   await storeTeamSchedule(schedule, id);
+  await updateAllMatchWinners(id);
   // TODO : update torunament to have number of rounds
 
   // redirect(`/tournament/${id}/schedule`);

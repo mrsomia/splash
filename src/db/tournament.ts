@@ -109,3 +109,66 @@ export async function storeTeamSchedule(
     return createdMatches;
   });
 }
+
+export async function updateAllMatchWinners(tournamentId: string) {
+  const tourneyMatches = await db
+    .select()
+    .from(matches)
+    .where(eq(matches.tournamentId, tournamentId));
+
+  await db.transaction(async (tx) => {
+    for (const match of tourneyMatches) {
+      if (match.teamAId == null && match.teamBId !== null) {
+        await tx
+          .update(matches)
+          .set({ winner: "team2" })
+          .where(eq(matches.id, match.id));
+        if (!match.parentId) continue;
+        const [parent] = await tx
+          .select()
+          .from(matches)
+          .where(eq(matches.id, match.parentId));
+
+        if (parent.teamAId == null) {
+          await tx
+            .update(matches)
+            .set({ teamAId: match.teamBId })
+            .where(eq(matches.id, parent.id));
+        } else if (parent.teamBId == null) {
+          await tx
+            .update(matches)
+            .set({ teamBId: match.teamBId })
+            .where(eq(matches.id, parent.id));
+        } else {
+          throw new Error("parent already has 2 teams");
+        }
+      }
+
+      if (match.teamBId == null && match.teamAId !== null) {
+        await tx
+          .update(matches)
+          .set({ winner: "team1" })
+          .where(eq(matches.id, match.id));
+        if (!match.parentId) continue;
+        const [parent] = await tx
+          .select()
+          .from(matches)
+          .where(eq(matches.id, match.parentId));
+
+        if (parent.teamAId == null) {
+          await tx
+            .update(matches)
+            .set({ teamAId: match.teamAId })
+            .where(eq(matches.id, parent.id));
+        } else if (parent.teamBId == null) {
+          await tx
+            .update(matches)
+            .set({ teamBId: match.teamAId })
+            .where(eq(matches.id, parent.id));
+        } else {
+          throw new Error("parent already has 2 teams");
+        }
+      }
+    }
+  });
+}
