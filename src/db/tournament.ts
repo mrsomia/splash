@@ -87,6 +87,7 @@ export async function storeTeamSchedule(
           teamAId: randomSchedule[i][0],
           teamBId: randomSchedule[i][1],
           round,
+          matchNumber: randomSchedule.length - i,
         })
         .returning();
       createdMatches.push(match);

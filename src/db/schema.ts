@@ -202,10 +202,12 @@ export const matches = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
     completedAt: timestamp("completed_at"),
     parentId: text("parent_id").references((): AnyPgColumn => matches.id),
+    matchNumber: integer("match_number").notNull(),
   },
   (matches) => ({
     unq1: unique().on(matches.round, matches.tournamentId, matches.teamAId),
     unq2: unique().on(matches.round, matches.tournamentId, matches.teamBId),
+    unq3: unique().on(matches.tournamentId, matches.matchNumber),
   }),
 );
 
