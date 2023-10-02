@@ -22,7 +22,7 @@ export default async function TournamentPage({ params }: PageProps) {
           <div key={idx} className="flex flex-col justify-center">
             <h3>{`Round ${round[0].round ?? "unknown"}`}</h3>
             {round.map((game) => (
-              <Game key={game.id} match={game} />
+              <Game key={game.id} match={game} totalRounds={rounds.length} />
             ))}
           </div>
         ))}
