@@ -38,6 +38,9 @@ dependencies:
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
+  lucide-react:
+    specifier: ^0.282.0
+    version: 0.282.0(react@18.2.0)
   nanoid:
     specifier: ^5.0.1
     version: 5.0.1
@@ -2691,6 +2694,14 @@ packages:
     dependencies:
       es5-ext: 0.10.62
     dev: true
+
+  /lucide-react@0.282.0(react@18.2.0):
+    resolution: {integrity: sha512-rN5U7DnX73M8LLZ/n37ZWcwow4vGJ94KKlJrdjzXjkiSRVymzCDaJJJh+38KqRiiRHopJ9+l4rRgd1p3OK+hig==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /magic-string@0.16.0:
     resolution: {integrity: sha512-c4BEos3y6G2qO0B9X7K0FVLOPT9uGrjYwYRLFmDqyl5YMboUviyecnXWp94fJTSMwPw2/sf+CEYt5AGpmklkkQ==}
