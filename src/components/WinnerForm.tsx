@@ -9,7 +9,7 @@ type WinnerFormProps = {
 };
 
 export default function WinnerForm({ match }: WinnerFormProps) {
-  const [selectValue, setSelectValue] = useState("--");
+  const [selectValue, setSelectValue] = useState(match.winner ?? "--");
   if (!match.teamAId) return null;
   if (!match.teamBId) return null;
 

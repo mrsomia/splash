@@ -62,18 +62,17 @@ export async function updateMatchWinner({
         .select()
         .from(matches)
         .where(eq(matches.id, match.parentId));
-      if (parent.teamAId == null) {
+      if (match.matchNumber % 2 == 1) {
+        // Left child
         await tx
           .update(matches)
           .set({ teamAId: teamId })
           .where(eq(matches.id, parent.id));
-      } else if (parent.teamBId == null) {
+      } else {
         await tx
           .update(matches)
           .set({ teamBId: teamId })
           .where(eq(matches.id, parent.id));
-      } else {
-        throw new Error("parent already has 2 teams");
       }
     } else {
       tx.update(tournaments)
