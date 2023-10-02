@@ -41,7 +41,7 @@ export default async function TournamentPage({ params }: PageProps) {
         {games.length ? (
           <Link href={`/tournament/${tournament.id}/schedule`}>Schedule</Link>
         ) : (
-          <ScheduleButton id={params.id} />
+          <ScheduleButton id={params.id} disabled={teams.length < 2} />
         )}
       </div>
       <Suspense fallback={<Spinner />}>
