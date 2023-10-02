@@ -1,5 +1,5 @@
 import { getTeamsForTournament } from "@/db/teams";
-import NewTeamForm from "./NewTeamForm";
+import NewTeamForm from "@/components/NewTeamForm";
 
 type PageProps = {
   params: {

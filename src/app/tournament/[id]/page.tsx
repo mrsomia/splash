@@ -3,7 +3,7 @@ import { getTeamsForTournament } from "@/db/teams";
 import { Suspense } from "react";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
-import ScheduleButton from "./ScheduleButton";
+import ScheduleButton from "@/components/ScheduleButton";
 
 type PageProps = {
   params: {

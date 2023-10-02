@@ -1,5 +1,5 @@
 import { getMatchDetails } from "@/db/match";
-import WinnerForm from "./WinnerForm";
+import WinnerForm from "@/components/WinnerForm";
 
 type PageProps = {
   params: {

@@ -3,7 +3,7 @@ import {
   getMatchesForTournamentByRounds,
   getTournamentFromId,
 } from "@/db/tournament";
-import Game from "./Game";
+import Game from "@/components/Game";
 
 type PageProps = {
   params: {

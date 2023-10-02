@@ -1,4 +1,4 @@
-import NewTournamentForm from "./NewTournamentForm";
+import NewTournamentForm from "@/components/NewTournamentForm";
 
 export default function NewTournament() {
   return (
