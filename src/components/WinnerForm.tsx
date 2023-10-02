@@ -28,9 +28,11 @@ export default function WinnerForm({ match }: WinnerFormProps) {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label>Winner</label>
+      <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+        <label htmlFor="winning-team">Winner</label>
         <select
+          id="winning-team"
+          name="winning-team"
           value={selectValue ?? "--"}
           onChange={(e) => setSelectValue(e.target.value)}
           className="text-black"
@@ -40,7 +42,9 @@ export default function WinnerForm({ match }: WinnerFormProps) {
           <option value={match.teamBId}>{match.teamB}</option>
         </select>
 
-        <button disabled={selectValue == "--"}>Set Winner</button>
+        <button className="py-2 px-4" disabled={selectValue == "--"}>
+          Update Winner
+        </button>
       </form>
     </div>
   );
