@@ -65,6 +65,12 @@ export async function getTournamentsFromEmail(email: string, limit = 0) {
   return tournamentsWhereUserIsAdmin;
 }
 
+export async function isUserAnAdmin(email: string, tournamentId: string) {
+  const tournaments = await getTournamentsFromEmail(email);
+  const tIds = tournaments.map((t) => t.id);
+  return tIds.some((id) => id == tournamentId);
+}
+
 export async function storeTeamSchedule(
   randomSchedule: ReturnType<typeof createRandomeScheduleForTeams>,
   tournamentId: string,
