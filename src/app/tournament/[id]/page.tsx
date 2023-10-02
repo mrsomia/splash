@@ -34,20 +34,26 @@ export default async function TournamentPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-8">
-      <div className="flex gap-4">
-        {isAdmin ? (
-          <Link href={`/tournament/${tournament.id}/signup`}>Add Teams</Link>
-        ) : null}
-        {games.length ? (
-          <Link href={`/tournament/${tournament.id}/schedule`}>Schedule</Link>
-        ) : (
-          <ScheduleButton id={params.id} disabled={teams.length < 2} />
-        )}
-      </div>
       <Suspense fallback={<Spinner />}>
-        <h1>{tournament.name}</h1>
-        <p>{`starts at ${start.toLocaleTimeString()}`}</p>
+        <h1 className="text-xl capitalize">{tournament.name}</h1>
+        <div className="flex gap-4">
+          {isAdmin ? (
+            <Link href={`/tournament/${tournament.id}/signup`}>
+              <button className={`rounded-md bg-orange-600 p-2`}>
+                Add Teams
+              </button>
+            </Link>
+          ) : null}
+          {games.length ? (
+            <Link href={`/tournament/${tournament.id}/schedule`}>
+              <button className="rounded-md bg-orange-600 p-2">Schedule</button>
+            </Link>
+          ) : (
+            <ScheduleButton id={params.id} disabled={teams.length < 2} />
+          )}
+        </div>
         <p>{`on ${start.toLocaleDateString()}`}</p>
+        <p>{`starts at ${start.toLocaleTimeString()}`}</p>
         {teams.length ? (
           <p>{`${teams.length} team${teams.length !== 1 ? "s" : ""}`}</p>
         ) : null}
