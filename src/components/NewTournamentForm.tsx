@@ -53,7 +53,7 @@ export default function NewTournamentForm() {
           />
         </div>
       </div>
-      <div>
+      <div className="w-100 flex justify-center">
         <button className="m-4 bg-orange-500 rounded-lg py-2 px-4">
           Submit
         </button>
