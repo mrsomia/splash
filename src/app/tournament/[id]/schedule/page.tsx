@@ -14,7 +14,6 @@ type PageProps = {
 export default async function TournamentPage({ params }: PageProps) {
   const tournament = await getTournamentFromId(params.id);
   const rounds = await getMatchesForTournamentByRounds(params.id);
-  console.log(rounds);
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-8">
       <h1 className="p-4">{`Schedule for ${tournament.name}`}</h1>

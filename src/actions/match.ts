@@ -1,6 +1,6 @@
 "use server";
 import { updateMatchWinner } from "@/db/match";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 export async function setMatchWinner({
   matchId,

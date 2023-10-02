@@ -10,5 +10,5 @@ export default function ScheduleButton({ id }: ScheduleButtonProps) {
   const handleClick = () => {
     scheduleTournament(id);
   };
-  return <button onClick={handleClick}>Start tournament</button>;
+  return <button onClick={handleClick}>Schedule Games</button>;
 }
