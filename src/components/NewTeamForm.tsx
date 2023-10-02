@@ -5,13 +5,16 @@ import { addTeamToTournament } from "@/actions/teams";
 
 export default function NewTeamForm({
   tournamentId,
+  teamNumber,
 }: {
   tournamentId: string;
+  teamNumber: number;
 }) {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(teamNumber.toString() ?? "");
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     addTeamToTournament({ tournamentId, teamName: name });
+    setName((name) => (Number(name) + 1).toString());
   };
   return (
     <form onSubmit={(e) => handleSubmit(e)}>

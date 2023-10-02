@@ -17,7 +17,10 @@ export default async function SignUpPage({ params }: PageProps) {
       {teams ? (
         <p>{`${teams.length} team${teams.length !== 1 ? "s" : ""}`}</p>
       ) : null}
-      <NewTeamForm tournamentId={params.id} />
+      <NewTeamForm
+        tournamentId={params.id}
+        teamNumber={teams ? teams.length + 1 : 1}
+      />
     </main>
   );
 }
