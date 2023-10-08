@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  // if (session) {
-  //   redirect(`/dashboard`);
-  // }
+  if (session) {
+    redirect(`/dashboard`);
+  }
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 ">
       <div className="container mx-auto px-4 md:px-6">
