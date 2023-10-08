@@ -55,7 +55,9 @@ export default async function TournamentPage({ params }: PageProps) {
         <p>{`on ${start.toLocaleDateString()}`}</p>
         <p>{`starts at ${start.toLocaleTimeString()}`}</p>
         {teams.length ? (
-          <p>{`${teams.length} team${teams.length !== 1 ? "s" : ""}`}</p>
+          <Link href={`/tournament/${params.id}/teams`}>
+            <p>{`${teams.length} team${teams.length !== 1 ? "s" : ""}`}</p>
+          </Link>
         ) : null}
       </Suspense>
     </main>
