@@ -184,6 +184,7 @@ export async function updateAllMatchWinners(tournamentId: string) {
 export async function getMatchesForTournament(id: string) {
   const teamA = alias(teams, "teamA");
   const teamB = alias(teams, "teamB");
+  const parent = alias(matches, "parent");
   const games = await db
     .select({
       id: matches.id,
@@ -193,12 +194,14 @@ export async function getMatchesForTournament(id: string) {
       round: matches.round,
       tournamentId: matches.tournamentId,
       matchNumber: matches.matchNumber,
-      parent: matches.parentId,
+      parentId: matches.parentId,
       teamA: teamA.name,
       teamB: teamB.name,
+      parentNumber: parent.matchNumber,
     })
     .from(matches)
     .where(eq(matches.tournamentId, id))
+    .fullJoin(parent, eq(matches.parentId, parent.id))
     .fullJoin(teamA, eq(matches.teamAId, teamA.id))
     .fullJoin(teamB, eq(matches.teamBId, teamB.id))
     .orderBy(asc(matches.matchNumber));
