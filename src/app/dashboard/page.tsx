@@ -13,31 +13,45 @@ export default async function Dasboard() {
     previousTournaments = await getTournamentsFromEmail(email, 3);
   }
   return (
-    <main className="flex min-h-screen flex-col items-center gap-12 p-24">
-      <div className="">
-        <div className="flex w-100 justify-end gap-8">
-          <h1 className="text-xl">Previous Tournaments</h1>
-          <Link href="/tournament/new">
-            <button className="rounded-md bg-orange-600 p-2">
-              <Plus />
-            </button>
+    <main className="w-full py-6">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="w-100 flex justify-between py-2">
+          <h1 className="text-xl font-bold ml-4 mr-auto inline-block">
+            Tournaments
+          </h1>
+          <Link className="inline-block px-6" href="/tournament/new">
+            <button className="rounded-md bg-orange-600 px-2 py-1">New</button>
           </Link>
         </div>
         <Suspense>
           {previousTournaments && previousTournaments.length ? (
-            <>
+            <div className="grid grid-cols-1 md:grid-cols-3 my-10 mx-3">
               {previousTournaments.map((t) => (
-                <div key={t.id} className="flex py-8">
-                  <Link href={`/tournament/${t.id}`}>
-                    <div className="flex flex-col gap-2">
+                <Link key={t.id} href={`/tournament/${t.id}`}>
+                  <div className="border border-grey-600 rounded-lg px-2 py-4">
+                    <div className="flex justify-between mx-6">
                       <p className="capitalize text-lg py-2">{t.name}</p>
-                      <span>{`starts at ${t.startTime?.toLocaleTimeString()} on ${t.startTime?.toLocaleDateString()}`}</span>
+                      <div>
+                        <span className="block">{`${t.startTime?.toLocaleDateString()} `}</span>
+                        <span className="block">
+                          {t.startTime?.toLocaleTimeString()}
+                        </span>
+                      </div>
                     </div>
-                  </Link>
-                </div>
+                  </div>
+                </Link>
               ))}
-            </>
-          ) : null}
+            </div>
+          ) : (
+            <div className="px-2 py-6 md:py-12 mx-auto text-center">
+              <p className="py-4 text-xl lg:text-3xl font-medium lg:font-semibold">
+                No tournaments
+              </p>
+              <p className="text-zinc-200">
+                Create a new tournament by clicking New in to top right corner
+              </p>
+            </div>
+          )}
         </Suspense>
       </div>
     </main>
