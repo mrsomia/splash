@@ -1,8 +1,4 @@
-import {
-  getMatchesForTournament,
-  getMatchesForTournamentByRounds,
-  getTournamentFromId,
-} from "@/db/tournament";
+import { getMatchesForTournamentByRounds } from "@/db/tournament";
 import Game from "@/components/Game";
 
 type PageProps = {
@@ -11,23 +7,20 @@ type PageProps = {
   };
 };
 
-export default async function TournamentPage({ params }: PageProps) {
-  const tournament = await getTournamentFromId(params.id);
+export default async function SchedulePage({ params }: PageProps) {
   const rounds = await getMatchesForTournamentByRounds(params.id);
+
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-8">
-      <h1 className="p-4">{`Schedule for ${tournament.name}`}</h1>
-      <div className={`flex items-center gap-4 px-4`}>
-        {rounds.reverse().map((round, idx) => (
-          <div key={idx} className="flex flex-col justify-center">
-            <h3>{`Round ${round[0].round ?? "unknown"}`}</h3>
-            {round.map((game) => (
-              <Game key={game.id} match={game} totalRounds={rounds.length} />
-            ))}
-          </div>
-        ))}
-        {}
-      </div>
-    </main>
+    <div className={`flex items-center gap-4 px-4 py-8`}>
+      {rounds.reverse().map((round, idx) => (
+        <div key={idx} className="flex flex-col justify-center">
+          <h3>{`Round ${round[0].round ?? "unknown"}`}</h3>
+          {round.map((game) => (
+            <Game key={game.id} match={game} totalRounds={rounds.length} />
+          ))}
+        </div>
+      ))}
+      {}
+    </div>
   );
 }

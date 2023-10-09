@@ -12,15 +12,11 @@ export default async function SignUpPage({ params }: PageProps) {
     console.error(err),
   );
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-8">
-      <h1>Signup Page</h1>
-      {teams ? (
-        <p>{`${teams.length} team${teams.length !== 1 ? "s" : ""}`}</p>
-      ) : null}
+    <div className="py-8 flex flex-col items-center justify-center gap-8">
       <NewTeamForm
         tournamentId={params.id}
         teamNumber={teams ? teams.length + 1 : 1}
       />
-    </main>
+    </div>
   );
 }
