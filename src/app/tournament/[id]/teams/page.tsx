@@ -16,7 +16,7 @@ export default async function TournamentPage({ params }: PageProps) {
   const start = new Date(tournament.startTime);
 
   return (
-    <main className="min-h-screen mx-8 my-4 md:my-20 md:max-w-3xl md:mx-auto">
+    <main className="min-h-screen mx-8 my-4 md:my-20 md:max-w-4xl md:mx-auto">
       <Suspense fallback={<Spinner />}>
         <div className="flex items-center py-4">
           <h1 className="text-3xl capitalize font-semibold py-6 mr-auto">

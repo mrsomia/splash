@@ -14,7 +14,7 @@ export default async function Dasboard() {
   }
   return (
     <main className="w-full py-6">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="w-100 md:max-w-4xl md:mx-auto mx-8 px-4 md:px-6">
         <div className="w-100 flex justify-between py-2">
           <h1 className="text-xl font-bold ml-4 mr-auto inline-block">
             Tournaments
@@ -28,10 +28,12 @@ export default async function Dasboard() {
             <div className="grid grid-cols-1 md:grid-cols-3 my-10 mx-3">
               {previousTournaments.map((t) => (
                 <Link key={t.id} href={`/tournament/${t.id}`}>
-                  <div className="border border-grey-600 rounded-lg px-2 py-4">
+                  <div className="border border-grey-600 rounded-lg px-2 py-4 hover:bg-slate-800">
                     <div className="flex justify-between mx-6">
-                      <p className="capitalize text-lg py-2">{t.name}</p>
-                      <div>
+                      <p className="capitalize text-lg py-2 font-medium">
+                        {t.name}
+                      </p>
+                      <div className="flex flex-col justify-center">
                         <span className="block">{`${t.startTime?.toLocaleDateString()} `}</span>
                         <span className="block">
                           {t.startTime?.toLocaleTimeString()}
