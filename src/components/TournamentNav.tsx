@@ -20,11 +20,11 @@ export default function TournamentNav({
   const pathArray = path.split("/");
 
   return (
-    <nav className="py-4 w-full">
-      <ul className="flex items-end w-full border-b text-zinc-100">
+    <nav className="py-4 w-full overflow-x-scroll">
+      <ul className="flex items-end gap-3 md:gap-4 w-full border-b text-zinc-100">
         <li
           className={cn(
-            "font-semibold px-4",
+            "font-medium md:font-semibold",
             path === `/tournament/${id}` ? "border-b-2 text-white" : null,
           )}
         >
@@ -32,7 +32,7 @@ export default function TournamentNav({
         </li>
         <li
           className={cn(
-            "font-semibold px-4",
+            "font-medium md:font-semibold",
             pathArray.at(-1) === "schedule" ? "border-b-2 text-white" : null,
           )}
         >
@@ -47,7 +47,7 @@ export default function TournamentNav({
           <>
             <li
               className={cn(
-                "font-semibold px-4",
+                "font-medium md:font-semibold",
                 pathArray.at(-1) === "signup" ? "border-b-2 text-white" : null,
               )}
             >
@@ -60,7 +60,7 @@ export default function TournamentNav({
             </li>
             <li
               className={cn(
-                "font-semibold px-4",
+                "font-medium md:font-semibold",
                 started && "cursor-not-allowed opacity-70",
               )}
             >
