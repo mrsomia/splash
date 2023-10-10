@@ -23,9 +23,11 @@ export default async function TournamentPage({ params }: PageProps) {
 
   return (
     <>
-      <div className="flex justify-between py-4">
+      <div className="flex flex-col md:flex-row justify-between py-4 gap-2">
         {/* TODO: Make this interactive */}
-        <h2 className="text-2xl font-medium">Current Active Games</h2>
+        <h2 className="text-lg md:text-2xl font-medium">
+          Current Active Games
+        </h2>
         <ul className="flex gap-8 justify-center">
           <li>12 vs 2</li>
           <li>15 vs 18</li>
@@ -36,7 +38,7 @@ export default async function TournamentPage({ params }: PageProps) {
       {teams.length ? (
         <>
           <div className="flex py-4 items-end w-full">
-            <h2 className="text-2xl font-medium">Teams</h2>
+            <h2 className="text-lg md:text-2xl font-medium">Teams</h2>
           </div>
           <div className="py-2 grid grid-cols-2 md:grid-cols-3 m-auto">
             {teams.map((team) => (
