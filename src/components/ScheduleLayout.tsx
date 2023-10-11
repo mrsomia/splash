@@ -18,7 +18,7 @@ export default function ScheduleLayout({ rounds }: ScheduleLayoutProps) {
             className="snap-center text-center flex flex-col justify-center px-10"
           >
             {/* <h2 className="hidden md:block">{round[0].round}</h2> */}
-            <div className="flex flex-col gap-2 justify-center">
+            <div className="flex flex-col gap-2 h-full justify-evenly">
               {round.map((game) => (
                 <Game key={game.id} match={game} totalRounds={rounds.length} />
               ))}
@@ -38,7 +38,7 @@ type GameProps = {
 export function Game({ match, totalRounds }: GameProps) {
   return (
     <Link href={`/tournament/${match.tournamentId}/match/${match.id}`}>
-      <div className="w-60 bg-grey-200 flex items-center py-1 px-4">
+      <div className={cn("w-60 bg-grey-200 flex items-center px-4 py-2")}>
         <p className="w-8 px-2 py-4 bg-gray-400">{match.matchNumber}</p>
         <div
           className={cn("w-5/6 px-2 flex flex-col flex-grow gap-1 md:gap-2")}
