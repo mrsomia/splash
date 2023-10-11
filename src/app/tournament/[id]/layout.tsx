@@ -32,7 +32,7 @@ export default async function TournamentPage({ params, children }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen mx-8 my-4 md:my-20 md:max-w-4xl md:mx-auto">
+    <main className="min-h-screen mx-6 my-4 md:my-20 md:max-w-4xl md:mx-auto">
       <Suspense fallback={<Spinner />}>
         <TournamentHeader
           name={tournament.name}
