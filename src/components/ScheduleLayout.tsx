@@ -12,7 +12,7 @@ export default function ScheduleLayout({ rounds }: ScheduleLayoutProps) {
   return (
     <div className={cn(`py-8 overflow-x-scroll snap-x min-w-full`)}>
       <div className="flex px-8 md:mx-auto">
-        {rounds.reverse().map((round, idx) => (
+        {rounds.map((round, idx) => (
           <div
             key={idx}
             className="snap-center text-center flex flex-col justify-center px-10"

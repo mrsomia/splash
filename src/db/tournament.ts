@@ -75,8 +75,8 @@ export async function storeTeamSchedule(
   randomSchedule: ReturnType<typeof createRandomeScheduleForTeams>,
   tournamentId: string,
 ) {
-  // const expectedTeams = randomSchedule.length + 1;
-  // const numberOfRounds = getNumberOfRounds(expectedTeams);
+  const expectedTeams = randomSchedule.length + 1;
+  const numberOfRounds = getNumberOfRounds(expectedTeams);
   await db.transaction(async (tx) => {
     let round = 1;
     // Last game of the round
@@ -93,7 +93,7 @@ export async function storeTeamSchedule(
           tournamentId,
           teamAId: randomSchedule[i][0],
           teamBId: randomSchedule[i][1],
-          round,
+          round: Math.abs(round - (numberOfRounds + 1)),
           matchNumber: randomSchedule.length - i,
         })
         .returning();
