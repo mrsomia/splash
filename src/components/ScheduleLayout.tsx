@@ -15,22 +15,19 @@ export default function ScheduleLayout({ rounds }: ScheduleLayoutProps) {
   const [round, setRound] = useState(1);
 
   useEffect(() => {
-    const rootElem = document.querySelector(".rounds-container");
-    console.log(rootElem);
-    console.log(window.innerWidth);
+    // Sets the round to the one in view
     const observer = new IntersectionObserver(
-      (entries, observer) => {
+      (entries) => {
         const currentEntries: number[] = [];
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             currentEntries.push(Number(entry.target.id[5]));
+            setRound(Number(entry.target.id[5]));
           }
         });
-        console.log({ currentEntries });
-        setRound(currentEntries[Math.floor(currentEntries.length / 2)]);
       },
       {
-        rootMargin: "0% -25%",
+        rootMargin: "0% -30%",
       },
     );
     const roundContainers = document.querySelectorAll(".round-container");
@@ -39,7 +36,6 @@ export default function ScheduleLayout({ rounds }: ScheduleLayoutProps) {
     return () => observer.disconnect();
   }, []);
 
-  console.log(round);
   const handleRoundClick = (roundNumber: number) => {
     const idString = `#round${roundNumber}Container`;
     const el = document.querySelector(idString);
@@ -53,19 +49,21 @@ export default function ScheduleLayout({ rounds }: ScheduleLayoutProps) {
       inline: "center",
     });
   };
+
   return (
     <>
-      <div className="min-w-full flex justify-center">
-        <ul className="flex gap-2 px-2 bg-white rounded-full">
+      <div className="md:hidden min-w-full flex justify-center">
+        {/* round nav */}
+        <ul className="flex gap-4 pt-2 rounded-full">
           {rounds.map((_, idx) => (
             <li
               key={idx}
               className={cn(
-                "p-2 rounded-full",
-                round === idx + 1 ? "bg-slate-800" : "text-black",
+                "px-3 rounded-full",
+                round === idx + 1 ? "bg-white text-black" : null,
               )}
             >
-              <button onClick={(_) => handleRoundClick(idx + 1)}>
+              <button className="" onClick={(_) => handleRoundClick(idx + 1)}>
                 {idx + 1}
               </button>
             </li>
@@ -80,7 +78,6 @@ export default function ScheduleLayout({ rounds }: ScheduleLayoutProps) {
               id={`round${idx + 1}Container`}
               className="snap-center text-center flex flex-col justify-center round-container"
             >
-              {/* <h2 className="hidden md:block">{round[0].round}</h2> */}
               <div className="flex flex-col gap-2 h-full justify-evenly">
                 {round.map((game) => (
                   <Game
@@ -127,12 +124,13 @@ export function Game({ match, totalRounds }: GameProps) {
                 : "bg-gray-500",
             )}
           >
-            <span>{match.teamB ?? "TBD"}</span>
+            <span>
+              {match.round === 1 && !match.teamBId
+                ? "Bye"
+                : match.teamB ?? "TBD"}
+            </span>
           </div>
         </div>
-        {/* {match.teamBId && match.winner ? ( */}
-        {/*   <p>{`${match.winner == "teamA" ? match.teamA : match.teamB} won`}</p> */}
-        {/* ) : null} */}
       </div>
     </Link>
   );
