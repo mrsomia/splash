@@ -70,7 +70,11 @@ export default function ScheduleLayout({ rounds }: ScheduleLayoutProps) {
           ))}
         </ul>
       </div>
-      <div className={cn(`py-8 overflow-x-scroll snap-x min-w-full`)}>
+      <div
+        className={cn(
+          `py-8 overflow-x-scroll snap-x snap-mandatory min-w-full`,
+        )}
+      >
         <div className="flex px-8 gap-16 md:mx-auto">
           {rounds.map((round, idx) => (
             <div
