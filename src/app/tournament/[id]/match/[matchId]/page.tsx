@@ -3,6 +3,7 @@ import WinnerForm from "@/components/WinnerForm";
 import { getTournamentFromId, isUserAnAdmin } from "@/db/tournament";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 
 type PageProps = {
   params: {
@@ -12,9 +13,7 @@ type PageProps = {
 };
 
 export default async function TournamentPage({ params }: PageProps) {
-  console.log("loading match details");
-  console.log(params);
-  const tournament = await getTournamentFromId(params.id);
+  console.info("loading match details:", params);
   const matchDetails = await getMatchDetails(params.matchId);
 
   const session = await getServerSession(authOptions);
@@ -25,20 +24,44 @@ export default async function TournamentPage({ params }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-8">
-      <h1>{tournament.name}</h1>
-      <h2>{`Game ${matchDetails.matchNumber}`}</h2>
-      <p>{`${matchDetails.teamA} vs ${matchDetails.teamB}`}</p>
-      {matchDetails.winner ? (
-        <p>
-          {matchDetails.winner == "teamA"
-            ? `${matchDetails.teamA} won`
-            : `${matchDetails.teamB} won`}
-        </p>
-      ) : (
-        <p>Winner TBD</p>
-      )}
-      {isAdmin ? <WinnerForm match={matchDetails} /> : null}
+    <main className="py-2 md:py-4">
+      <h2 className="text-lg md:text-xl font-semibold">{`Game ${matchDetails.matchNumber}`}</h2>
+      <div className="flex justify-center py-4">
+        <div className="flex flex-col gap-2">
+          <div
+            className={cn(
+              matchDetails.winner === "teamA"
+                ? "bg-green-300 text-medium text-black w-40"
+                : "bg-gray-500",
+            )}
+          >
+            <p className="text-center">{matchDetails.teamA ?? "TBD"}</p>
+          </div>
+          <div
+            className={cn(
+              matchDetails.winner === "teamB"
+                ? "bg-green-300 text-medium text-black w-40"
+                : "bg-gray-500",
+            )}
+          >
+            <p className="text-center">
+              {matchDetails.round === 1 && !matchDetails.teamBId
+                ? "Bye"
+                : matchDetails.teamB ?? "TBD"}
+            </p>
+          </div>
+          {matchDetails.winner ? (
+            <p className="py-4 text-center">
+              {matchDetails.winner == "teamA"
+                ? `${matchDetails.teamA} won`
+                : `${matchDetails.teamB} won`}
+            </p>
+          ) : (
+            <p className="py-4 text-center">Winner TBD</p>
+          )}
+          {isAdmin ? <WinnerForm match={matchDetails} /> : null}
+        </div>
+      </div>
     </main>
   );
 }

@@ -19,7 +19,6 @@ export default function WinnerForm({ match }: WinnerFormProps) {
       console.error("Please set a winner");
       return;
     }
-    console.log({ matchId: match.id, teamId: selectValue });
     setMatchWinner({
       matchId: match.id,
       teamId: selectValue,
@@ -27,7 +26,7 @@ export default function WinnerForm({ match }: WinnerFormProps) {
     });
   };
   return (
-    <div>
+    <div className="w-52">
       <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
         <label htmlFor="winning-team">Winner</label>
         <select
@@ -42,7 +41,10 @@ export default function WinnerForm({ match }: WinnerFormProps) {
           <option value={match.teamBId}>{match.teamB}</option>
         </select>
 
-        <button className="py-2 px-4" disabled={selectValue == "--"}>
+        <button
+          className="my-4 py-2 px-4 bg-green-700 hover:bg-green-900 disabled:bg-slate-400 rounded-full w-3/4 self-center"
+          disabled={selectValue == "--"}
+        >
           Update Winner
         </button>
       </form>
