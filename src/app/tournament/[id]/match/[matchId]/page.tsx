@@ -35,7 +35,7 @@ export default async function TournamentPage({ params }: PageProps) {
                 : "bg-gray-500",
             )}
           >
-            <p className="text-center">{matchDetails.teamA ?? "TBD"}</p>
+            <p className="text-center w-48">{matchDetails.teamA ?? "TBD"}</p>
           </div>
           <div
             className={cn(
@@ -44,7 +44,7 @@ export default async function TournamentPage({ params }: PageProps) {
                 : "bg-gray-500",
             )}
           >
-            <p className="text-center">
+            <p className="text-center w-48">
               {matchDetails.round === 1 && !matchDetails.teamBId
                 ? "Bye"
                 : matchDetails.teamB ?? "TBD"}
