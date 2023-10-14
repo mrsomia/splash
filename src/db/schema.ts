@@ -200,6 +200,7 @@ export const matches = pgTable(
       }),
     winner: varchar("winner", { enum: ["teamA", "teamB"] }),
     createdAt: timestamp("created_at").notNull().defaultNow(),
+    startedAt: timestamp("started_at"),
     completedAt: timestamp("completed_at"),
     parentId: text("parent_id").references((): AnyPgColumn => matches.id),
     matchNumber: integer("match_number").notNull(),

@@ -129,7 +129,11 @@ export async function updateAllMatchWinners(tournamentId: string) {
       if (match.teamAId == null && match.teamBId !== null) {
         await tx
           .update(matches)
-          .set({ winner: "teamB", completedAt: new Date() })
+          .set({
+            winner: "teamB",
+            completedAt: new Date(),
+            startedAt: new Date(),
+          })
           .where(eq(matches.id, match.id));
         if (!match.parentId) continue;
         const [parent] = await tx
@@ -155,7 +159,11 @@ export async function updateAllMatchWinners(tournamentId: string) {
       if (match.teamBId == null && match.teamAId !== null) {
         await tx
           .update(matches)
-          .set({ winner: "teamA", completedAt: new Date() })
+          .set({
+            winner: "teamA",
+            completedAt: new Date(),
+            startedAt: new Date(),
+          })
           .where(eq(matches.id, match.id));
         if (!match.parentId) continue;
         const [parent] = await tx
