@@ -1,6 +1,6 @@
 import { db } from "@/db/index";
 import { matches, teams, tournaments } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, isNotNull, isNull } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
 export async function getMatchDetails(id: string) {
@@ -92,4 +92,34 @@ export async function setMatchToStarted({ matchId }: { matchId: string }) {
     .update(matches)
     .set({ startedAt: new Date() })
     .where(eq(matches.id, matchId));
+}
+
+export async function getCurrentMatches(tournamentId: string) {
+  const teamA = alias(teams, "teamA");
+  const teamB = alias(teams, "teamB");
+  const currentMatches = await db
+    .select({
+      id: matches.id,
+      teamAId: matches.teamAId,
+      teamBId: matches.teamBId,
+      winner: matches.winner,
+      round: matches.round,
+      matchNumber: matches.matchNumber,
+      startedAt: matches.startedAt,
+      tournamentId: matches.tournamentId,
+      parent: matches.parentId,
+      teamA: teamA.name,
+      teamB: teamB.name,
+    })
+    .from(matches)
+    .where(
+      and(
+        isNotNull(matches.startedAt),
+        isNull(matches.completedAt),
+        eq(matches.tournamentId, tournamentId),
+      ),
+    )
+    .leftJoin(teamA, eq(teamA.id, matches.teamAId))
+    .leftJoin(teamB, eq(teamB.id, matches.teamBId));
+  return currentMatches;
 }
