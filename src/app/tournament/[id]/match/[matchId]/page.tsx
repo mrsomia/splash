@@ -31,7 +31,7 @@ export default async function TournamentPage({ params }: PageProps) {
           <div
             className={cn(
               matchDetails.winner === "teamA"
-                ? "bg-green-300 text-medium text-black w-40"
+                ? "bg-green-300 text-medium text-black"
                 : "bg-gray-500",
             )}
           >
@@ -40,7 +40,7 @@ export default async function TournamentPage({ params }: PageProps) {
           <div
             className={cn(
               matchDetails.winner === "teamB"
-                ? "bg-green-300 text-medium text-black w-40"
+                ? "bg-green-300 text-medium text-black"
                 : "bg-gray-500",
             )}
           >
