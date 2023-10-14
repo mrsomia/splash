@@ -2,6 +2,8 @@
 
 import { useState, type FormEvent } from "react";
 import { addTeamToTournament } from "@/actions/teams";
+import { deleteSchedule } from "@/actions/match";
+import { cn } from "@/lib/utils";
 
 export default function NewTeamForm({
   tournamentId,
@@ -36,5 +38,33 @@ export default function NewTeamForm({
         </button>
       </div>
     </form>
+  );
+}
+
+type DeleteScheduleFormProps = {
+  tournamentId: string;
+};
+
+export function DeleteScheduleForm({ tournamentId }: DeleteScheduleFormProps) {
+  const handleClick = () => {
+    deleteSchedule({ tournamentId });
+  };
+  return (
+    <div className="flex flex-col gap-4">
+      <p className="px-2 text-center w-60 md:w-96">
+        Games have been scheduled. To add a new team you will need to delete the
+        schedule
+      </p>
+      <button
+        className={cn(
+          "my-4 py-2 px-4 bg-red-700 hover:bg-red-900 disabled:bg-slate-400",
+          "rounded-full w-60 self-center",
+        )}
+        onClick={handleClick}
+        // disabled={selectValue == "--"}
+      >
+        Delete Schedule
+      </button>
+    </div>
   );
 }
