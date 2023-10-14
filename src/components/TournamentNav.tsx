@@ -52,7 +52,7 @@ export default function TournamentNav({
               )}
             >
               <Link
-                href={started ? `${path}` : `/tournament/${id}/signup`}
+                href={`/tournament/${id}/signup`}
                 className={cn(started && "cursor-not-allowed opacity-70")}
               >
                 Add Teams
