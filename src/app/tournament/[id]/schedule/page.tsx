@@ -14,7 +14,15 @@ export default async function SchedulePage({ params }: PageProps) {
 
   return (
     <Suspense fallback={<Spinner />}>
-      <ScheduleLayout rounds={rounds} />
+      {rounds.length > 0 ? (
+        <ScheduleLayout rounds={rounds} />
+      ) : (
+        <div className="flex flex-col items-center gap-4 py-8">
+          <p className="px-2 text-center w-60 md:w-96">
+            No Games Scheduled yet
+          </p>
+        </div>
+      )}
     </Suspense>
   );
 }
