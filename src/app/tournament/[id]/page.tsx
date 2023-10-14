@@ -3,6 +3,7 @@ import { getTeamsForTournament } from "@/db/teams";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getCurrentMatches } from "@/db/match";
 
 type PageProps = {
   params: {
@@ -12,6 +13,7 @@ type PageProps = {
 
 export default async function TournamentPage({ params }: PageProps) {
   const teams = await getTeamsForTournament(params.id);
+  const currentMatches = await getCurrentMatches(params.id);
 
   const session = await getServerSession(authOptions);
   let isAdmin = false;
@@ -24,20 +26,30 @@ export default async function TournamentPage({ params }: PageProps) {
   return (
     <>
       <div className="flex flex-col md:flex-row justify-between py-4 gap-2">
-        {/* TODO: Make this interactive */}
         <h2 className="text-lg md:text-2xl font-medium">
           Current Active Games
         </h2>
-        <ul className="flex gap-8 justify-center">
-          <li>12 vs 2</li>
-          <li>15 vs 18</li>
-          <li>16 vs 9</li>
-          <li>17 vs 28</li>
-        </ul>
+        {currentMatches.length > 0 ? (
+          <ul className="flex flex-col gap-4 justify-center items-center py-2">
+            {currentMatches.map((match) => (
+              <li key={match.id}>
+                <Link href={`/tournament/${params.id}/match/${match.id}`}>
+                  {`${match.teamA} vs ${match.teamB}`}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="flex justify-center">
+            <p className="text-gray-300 italic">
+              There are no active games currently
+            </p>
+          </div>
+        )}
       </div>
       {teams.length ? (
         <>
-          <div className="flex py-4 items-end w-full">
+          <div className="flex py-2 items-end w-full">
             <h2 className="text-lg md:text-2xl font-medium">Teams</h2>
           </div>
           <div className="py-2 grid grid-cols-2 md:grid-cols-3 m-auto">
