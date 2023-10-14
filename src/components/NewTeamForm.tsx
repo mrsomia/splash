@@ -19,14 +19,21 @@ export default function NewTeamForm({
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
       <div className="flex flex-col gap-4">
-        <label htmlFor="teamName">Name</label>
+        <label htmlFor="teamName" className="font-medium">
+          Name
+        </label>
         <input
           type="text"
           value={name}
-          className="text-black"
+          className="text-black p-2"
           onChange={(e) => setName(e.target.value)}
         />
-        <button>Submit</button>
+        <button
+          className="my-4 py-2 px-4 bg-green-700 hover:bg-green-900 disabled:bg-slate-400 rounded-full w-3/4 self-center"
+          // disabled={selectValue == "--"}
+        >
+          Submit
+        </button>
       </div>
     </form>
   );
