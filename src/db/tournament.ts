@@ -202,6 +202,7 @@ export async function getMatchesForTournament(id: string) {
       round: matches.round,
       tournamentId: matches.tournamentId,
       matchNumber: matches.matchNumber,
+      startedAt: matches.startedAt,
       parentId: matches.parentId,
       teamA: teamA.name,
       teamB: teamB.name,

@@ -1,5 +1,9 @@
 "use server";
-import { deleteScheduleForTournament, updateMatchWinner } from "@/db/match";
+import {
+  deleteScheduleForTournament,
+  setMatchToStarted,
+  updateMatchWinner,
+} from "@/db/match";
 import { revalidatePath } from "next/cache";
 
 export async function setMatchWinner({
@@ -24,5 +28,16 @@ export async function deleteSchedule({
 }) {
   console.info(`Deleting schedule for ${tournamentId}`);
   await deleteScheduleForTournament(tournamentId);
+  revalidatePath(`/tournament/${tournamentId}`);
+}
+
+export async function startMatch({
+  matchId,
+  tournamentId,
+}: {
+  matchId: string;
+  tournamentId: string;
+}) {
+  await setMatchToStarted({ matchId });
   revalidatePath(`/tournament/${tournamentId}`);
 }

@@ -14,6 +14,7 @@ export async function getMatchDetails(id: string) {
       winner: matches.winner,
       round: matches.round,
       matchNumber: matches.matchNumber,
+      startedAt: matches.startedAt,
       tournamentId: matches.tournamentId,
       parent: matches.parentId,
       teamA: teamA.name,
@@ -84,4 +85,11 @@ export async function updateMatchWinner({
 
 export async function deleteScheduleForTournament(tournamentId: string) {
   await db.delete(matches).where(eq(matches.tournamentId, tournamentId));
+}
+
+export async function setMatchToStarted({ matchId }: { matchId: string }) {
+  await db
+    .update(matches)
+    .set({ startedAt: new Date() })
+    .where(eq(matches.id, matchId));
 }

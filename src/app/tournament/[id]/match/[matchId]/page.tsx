@@ -4,6 +4,8 @@ import { getTournamentFromId, isUserAnAdmin } from "@/db/tournament";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { match } from "assert";
+import StartMatchButton from "@/components/StartMatchButton";
 
 type PageProps = {
   params: {
@@ -59,6 +61,12 @@ export default async function TournamentPage({ params }: PageProps) {
           ) : (
             <p className="py-4 text-center">Winner TBD</p>
           )}
+          {isAdmin && !matchDetails.startedAt ? (
+            <StartMatchButton
+              matchId={matchDetails.id}
+              tournamentId={matchDetails.tournamentId}
+            />
+          ) : null}
           {isAdmin ? <WinnerForm match={matchDetails} /> : null}
         </div>
       </div>
