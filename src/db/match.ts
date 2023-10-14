@@ -81,3 +81,7 @@ export async function updateMatchWinner({
     }
   });
 }
+
+export async function deleteScheduleForTournament(tournamentId: string) {
+  await db.delete(matches).where(eq(matches.tournamentId, tournamentId));
+}
