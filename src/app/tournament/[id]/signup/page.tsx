@@ -1,5 +1,6 @@
 import { getTeamsForTournament } from "@/db/teams";
-import NewTeamForm from "@/components/NewTeamForm";
+import NewTeamForm, { DeleteScheduleForm } from "@/components/NewTeamForm";
+import { getMatchesForTournament } from "@/db/tournament";
 
 type PageProps = {
   params: {
@@ -8,15 +9,20 @@ type PageProps = {
 };
 
 export default async function SignUpPage({ params }: PageProps) {
+  const games = await getMatchesForTournament(params.id);
   const teams = await getTeamsForTournament(params.id).catch((err) =>
     console.error(err),
   );
   return (
     <div className="py-8 flex flex-col items-center justify-center gap-8">
-      <NewTeamForm
-        tournamentId={params.id}
-        teamNumber={teams ? teams.length + 1 : 1}
-      />
+      {games.length > 0 ? (
+        <DeleteScheduleForm tournamentId={params.id} />
+      ) : (
+        <NewTeamForm
+          tournamentId={params.id}
+          teamNumber={teams ? teams.length + 1 : 1}
+        />
+      )}
     </div>
   );
 }
