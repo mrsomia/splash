@@ -3,7 +3,6 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Plus } from "lucide-react";
 
 export default async function Dasboard() {
   const session = await getServerSession(authOptions);
