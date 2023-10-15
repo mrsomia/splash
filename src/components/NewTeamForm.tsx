@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState, type FormEvent } from "react";
 import { addTeamToTournament } from "@/actions/teams";
 import { deleteSchedule } from "@/actions/match";
@@ -16,6 +17,7 @@ export default function NewTeamForm({
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     addTeamToTournament({ tournamentId, teamName: name });
+    toast.success("Team added");
     setName((name) => (Number(name) + 1).toString());
   };
   return (
