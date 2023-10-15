@@ -25,7 +25,7 @@ export default async function TournamentPage({ params }: PageProps) {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between py-4 gap-2">
+      <div className="flex flex-col justify-between py-4 gap-2">
         <h2 className="text-lg md:text-2xl font-medium">
           Current Active Games
         </h2>
