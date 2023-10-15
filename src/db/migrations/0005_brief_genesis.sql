@@ -1,1 +1,0 @@
-ALTER TABLE "tournament_admins" ALTER COLUMN "invited_by" DROP NOT NULL;
