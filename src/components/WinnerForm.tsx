@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { setMatchWinner } from "@/actions/match";
 import { getMatchDetails } from "@/db/match";
 import { FormEvent, useState } from "react";
@@ -24,6 +25,7 @@ export default function WinnerForm({ match }: WinnerFormProps) {
       teamId: selectValue,
       tournamentId: match.tournamentId,
     });
+    toast.success(`Winner set to ${selectValue}`);
   };
   return (
     <div className="w-52">
