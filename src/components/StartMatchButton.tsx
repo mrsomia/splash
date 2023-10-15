@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { startMatch } from "@/actions/match";
 
 export default function StartMatchButton({
@@ -11,7 +12,7 @@ export default function StartMatchButton({
 }) {
   const handleClick = () => {
     startMatch({ matchId, tournamentId });
-    // TODO: Add toast message
+    toast.success("Game started");
   };
   return (
     <button
