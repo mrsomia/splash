@@ -13,10 +13,17 @@ export default function NewTeamForm({
   tournamentId: string;
   teamNumber: number;
 }) {
+  const [pending, setPending] = useState(false);
   const [name, setName] = useState(teamNumber.toString() ?? "");
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addTeamToTournament({ tournamentId, teamName: name });
+    setPending(true);
+    const err = addTeamToTournament({ tournamentId, teamName: name });
+    setPending(false);
+    if (err) {
+      toast.error(err);
+      return;
+    }
     toast.success("Team added");
     setName((name) => (Number(name) + 1).toString());
   };
@@ -34,9 +41,9 @@ export default function NewTeamForm({
         />
         <button
           className="my-4 py-2 px-4 bg-green-700 hover:bg-green-900 disabled:bg-slate-400 rounded-full w-3/4 self-center"
-          // disabled={selectValue == "--"}
+          disabled={pending}
         >
-          Submit
+          {pending ? "Adding Team" : "Submit"}
         </button>
       </div>
     </form>

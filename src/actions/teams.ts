@@ -10,6 +10,12 @@ export async function addTeamToTournament({
   teamName: string;
 }) {
   console.log({ tournamentId, teamName });
-  await createTeam({ tournamentId, teamName });
+  try {
+    await createTeam({ tournamentId, teamName });
+  } catch (e) {
+    console.error("Error creating new team", { tournamentId, teamName });
+    console.error(e);
+    return "Error creating new team";
+  }
   revalidatePath(`/tournament/${tournamentId}`);
 }
