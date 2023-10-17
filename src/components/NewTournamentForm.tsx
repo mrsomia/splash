@@ -32,7 +32,7 @@ export default function NewTournamentForm() {
           type="text"
           name="tournamentName"
           id="tournamentName"
-          className="text-black"
+          className="text-black p-2"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -43,7 +43,7 @@ export default function NewTournamentForm() {
             type="date"
             name="startDate"
             id="startDate"
-            className="text-black"
+            className="text-black p-2 flex-grow"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             required
@@ -52,7 +52,7 @@ export default function NewTournamentForm() {
             type="time"
             name="startTime"
             id="startTime"
-            className="text-black"
+            className="text-black p-2"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
             required

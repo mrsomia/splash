@@ -2,9 +2,13 @@ import NewTournamentForm from "@/components/NewTournamentForm";
 
 export default function NewTournament() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-8">
-      <h1 className="text-lg">Create Tournament</h1>
-      <NewTournamentForm />
+    <main className="min-h-screen">
+      <h1 className="text-xl font-semibold mx-auto text-center py-8 px-4">
+        Create Tournament
+      </h1>
+      <div className="w-3/5 sm:max-w-xs mx-auto">
+        <NewTournamentForm />
+      </div>
     </main>
   );
 }
