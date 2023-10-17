@@ -25,16 +25,27 @@ export async function createTournament(
       "Unable to find email for user session when createing new tournament",
       { session },
     );
-    throw new Error("Unable to find email for user session");
+    throw new Error("Unable to find email for logged in user");
   }
   //TODO: validate arguments
 
-  const tournament = await createTournamentFromEmail({
-    userEmail: email,
-    startTime,
-    tournamentName,
-  });
-  redirect(`/tournament/${tournament.id}`);
+  try {
+    const tournament = await createTournamentFromEmail({
+      userEmail: email,
+      startTime,
+      tournamentName,
+    });
+    console.log("created tournament", {
+      tournamentName,
+      startTime,
+      id: tournament.id,
+    });
+    redirect(`/tournament/${tournament.id}`);
+  } catch (e) {
+    console.error("Error Creating tournament", { tournamentName, startTime });
+    console.error(e);
+    return "Error Creating tournament";
+  }
 }
 export async function scheduleTournament(id: string) {
   let tournamentTeams;

@@ -4,6 +4,8 @@ import { useState, type FormEvent } from "react";
 import { format } from "date-fns";
 import { createTournament } from "@/actions/tournament";
 import { getEpochFromDateAndTime } from "@/lib/dates";
+import { errorToString } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function NewTournamentForm() {
   const [name, setName] = useState("");
@@ -15,7 +17,11 @@ export default function NewTournamentForm() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     // TODO: Validation
     e.preventDefault();
-    await createTournament(name, epochStart);
+    const err = await createTournament(name, epochStart);
+    if (err) {
+      console.error(err);
+      toast.error(errorToString(err));
+    }
   };
 
   return (

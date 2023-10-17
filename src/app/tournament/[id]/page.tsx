@@ -21,7 +21,6 @@ export default async function TournamentPage({ params }: PageProps) {
     const email = session.user.email;
     isAdmin = await isUserAnAdmin(email, params.id);
   }
-  console.log({ isAdmin });
 
   return (
     <>
