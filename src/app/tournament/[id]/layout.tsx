@@ -31,6 +31,8 @@ export default async function TournamentPage({ params, children }: PageProps) {
     isAdmin = await isUserAnAdmin(email, params.id);
   }
 
+  console.info({ isAdmin });
+
   return (
     <main className="min-h-screen mx-6 my-4 md:my-20 md:max-w-4xl md:mx-auto">
       <Suspense fallback={<Spinner />}>
