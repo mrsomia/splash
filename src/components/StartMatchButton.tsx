@@ -2,6 +2,8 @@
 
 import { toast } from "sonner";
 import { startMatch } from "@/actions/match";
+import { useState } from "react";
+import { errorToString } from "@/lib/utils";
 
 export default function StartMatchButton({
   matchId,
@@ -10,16 +12,23 @@ export default function StartMatchButton({
   matchId: string;
   tournamentId: string;
 }) {
-  const handleClick = () => {
-    startMatch({ matchId, tournamentId });
-    toast.success("Game started");
+  const [pending, setPending] = useState(false);
+  const handleClick = async () => {
+    setPending(true);
+    const err = await startMatch({ matchId, tournamentId });
+    setPending(false);
+    if (err) {
+      console.error(err);
+      toast.error(errorToString(err));
+    }
   };
   return (
     <button
       className="my-4 py-2 px-4 bg-green-700 hover:bg-green-900 disabled:bg-slate-400 rounded-full w-3/4 self-center"
       onClick={handleClick}
+      disabled={pending}
     >
-      Start Match
+      {pending ? "Starting game..." : "Start Match"}
     </button>
   );
 }

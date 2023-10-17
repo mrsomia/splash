@@ -38,6 +38,12 @@ export async function startMatch({
   matchId: string;
   tournamentId: string;
 }) {
-  await setMatchToStarted({ matchId });
-  revalidatePath(`/tournament/${tournamentId}`);
+  try {
+    await setMatchToStarted({ matchId });
+    revalidatePath(`/tournament/${tournamentId}`);
+  } catch (e) {
+    console.error(`Error starting match: ${matchId}`);
+    console.error(e);
+    return "Error starting match";
+  }
 }
