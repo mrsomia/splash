@@ -12,10 +12,10 @@ export default function NewTournamentForm() {
 
   const epochStart = getEpochFromDateAndTime(startDate, startTime);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     // TODO: Validation
     e.preventDefault();
-    createTournament(name, epochStart);
+    await createTournament(name, epochStart);
   };
 
   return (
