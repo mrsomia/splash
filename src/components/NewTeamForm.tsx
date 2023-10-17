@@ -15,10 +15,16 @@ export default function NewTeamForm({
 }) {
   const [pending, setPending] = useState(false);
   const [name, setName] = useState(teamNumber.toString() ?? "");
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPending(true);
-    const err = addTeamToTournament({ tournamentId, teamName: name });
+    const err = await addTeamToTournament({
+      tournamentId,
+      teamName: name,
+    }).catch((e) => {
+      console.error(e);
+      toast.error("Error adding team to tournament");
+    });
     setPending(false);
     if (err) {
       toast.error(err);
