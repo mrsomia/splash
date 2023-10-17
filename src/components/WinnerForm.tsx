@@ -4,27 +4,36 @@ import { toast } from "sonner";
 import { setMatchWinner } from "@/actions/match";
 import { getMatchDetails } from "@/db/match";
 import { FormEvent, useState } from "react";
+import { errorToString } from "@/lib/utils";
 
 type WinnerFormProps = {
   match: Awaited<ReturnType<typeof getMatchDetails>>;
 };
 
 export default function WinnerForm({ match }: WinnerFormProps) {
+  const [pending, setPending] = useState(false);
   const [selectValue, setSelectValue] = useState(match.winner ?? "--");
   if (!match.teamAId) return null;
   if (!match.teamBId) return null;
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectValue == "--") {
       console.error("Please set a winner");
       return;
     }
-    setMatchWinner({
+    setPending(true);
+    const err = await setMatchWinner({
       matchId: match.id,
       teamId: selectValue,
       tournamentId: match.tournamentId,
     });
+    setPending(false);
+    if (err) {
+      console.error(err);
+      toast.error(errorToString(err));
+      return;
+    }
     toast.success(`Winner set to ${selectValue}`);
   };
   return (
@@ -45,9 +54,9 @@ export default function WinnerForm({ match }: WinnerFormProps) {
 
         <button
           className="my-4 py-2 px-4 bg-green-700 hover:bg-green-900 disabled:bg-slate-400 rounded-full w-3/4 self-center"
-          disabled={selectValue == "--"}
+          disabled={pending || selectValue == "--"}
         >
-          Update Winner
+          {pending ? "Updating Winner..." : "Update Winner"}
         </button>
       </form>
     </div>

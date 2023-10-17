@@ -17,8 +17,17 @@ export async function setMatchWinner({
 }) {
   console.log({ matchId, teamId, tournamentId });
   // TODO: add override handling/remove team for matches
-  await updateMatchWinner({ matchId, teamId });
-  revalidatePath(`/tournament/${tournamentId}/schedule`);
+  try {
+    await updateMatchWinner({ matchId, teamId });
+    revalidatePath(`/tournament/${tournamentId}/schedule`);
+  } catch (e) {
+    console.error("Error updating match winner", {
+      matchId,
+      teamId,
+      tournamentId,
+    });
+    return "Error updating match winner";
+  }
 }
 
 export async function deleteSchedule({
