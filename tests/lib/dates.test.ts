@@ -1,4 +1,4 @@
-import { getEpochFromDateAndTime } from "../../lib/dates";
+import { getEpochFromDateAndTime } from "@/lib/dates";
 import { expect, test, describe } from "vitest";
 
 describe("Dates", () => {

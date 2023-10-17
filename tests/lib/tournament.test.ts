@@ -3,7 +3,7 @@ import {
   getNumberOfRounds,
   getStartIndex,
   getUpperFactorOf2,
-} from "../../lib/tournament";
+} from "@/lib/tournament";
 import { expect, test, describe } from "vitest";
 import { faker } from "@faker-js/faker";
 
