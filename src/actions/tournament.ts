@@ -37,15 +37,41 @@ export async function createTournament(
   redirect(`/tournament/${tournament.id}`);
 }
 export async function scheduleTournament(id: string) {
-  console.log(`scheduling ${id}`);
-  const tournamentTeams = await getTeamsForTournament(id);
+  let tournamentTeams;
+  try {
+    tournamentTeams = await getTeamsForTournament(id);
+    if (!tournamentTeams) {
+      throw new Error(`Unable to find any teams for tournament`);
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error(`Error fetching teams for tournament ${id}`);
+      console.error(e.message);
+      return e.message;
+    }
+    const err = new Error(`An unknown error occurred`);
+    console.error(err);
+    console.error(e);
+    return err;
+  }
   const teamIds = tournamentTeams.map((t) => t.id);
   const schedule = createRandomeScheduleForTeams(teamIds);
   console.log(schedule);
-  await storeTeamSchedule(schedule, id);
-  await updateAllMatchWinners(id);
-  // TODO : update torunament to have number of rounds
-
+  try {
+    await storeTeamSchedule(schedule, id);
+  } catch (e) {
+    const err = `Error storing schedule for tournament ${id}, try again`;
+    console.error(err);
+    console.error(e);
+    return err;
+  }
+  try {
+    await updateAllMatchWinners(id);
+  } catch (e) {
+    console.error(`Error updating winners of round 1`);
+    console.error(e);
+    return "Error updating winners of round 1 try updating the bye rounds manually";
+  }
   revalidatePath(`/tournament/${id}`);
   redirect(`/tournament/${id}/schedule`);
 }
