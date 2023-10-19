@@ -3,6 +3,7 @@
 import { getTeamsForTournament } from "@/db/teams";
 import {
   createTournamentFromEmail,
+  isUserAnAdmin,
   storeTeamSchedule,
   updateAllMatchWinners,
 } from "@/db/tournament";
@@ -11,6 +12,27 @@ import { createRandomeScheduleForTeams } from "@/lib/tournament";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+
+export async function isUserATournamentAdmin(id: string, throws = true) {
+  const session = await getServerSession(authOptions);
+  const email = session?.user?.email;
+  if (!email) {
+    console.error(
+      "Unable to validate session, please ensure you are signed in",
+    );
+    throw new Error(
+      "Unable to validate session, please ensure you are signed in",
+    );
+  }
+  const isAdmin = await isUserAnAdmin(email, id);
+  if (!isAdmin) {
+    console.error("Unauthorised, user is not an admin");
+    if (throws) {
+      throw new Error("Unauthorised, user is not an admin");
+    }
+  }
+  return { isAdmin, email, session };
+}
 
 export async function createTournament(
   tournamentName: string,
@@ -48,6 +70,7 @@ export async function createTournament(
   }
 }
 export async function scheduleTournament(id: string) {
+  await isUserATournamentAdmin(id);
   let tournamentTeams;
   try {
     tournamentTeams = await getTeamsForTournament(id);

@@ -5,6 +5,7 @@ import {
   updateMatchWinner,
 } from "@/db/match";
 import { revalidatePath } from "next/cache";
+import { isUserATournamentAdmin } from "./tournament";
 
 export async function setMatchWinner({
   matchId,
@@ -15,6 +16,7 @@ export async function setMatchWinner({
   teamId: string;
   tournamentId: string;
 }) {
+  await isUserATournamentAdmin(tournamentId);
   console.log({ matchId, teamId, tournamentId });
   // TODO: add override handling/remove team for matches
   try {
@@ -35,6 +37,7 @@ export async function deleteSchedule({
 }: {
   tournamentId: string;
 }) {
+  await isUserATournamentAdmin(tournamentId);
   console.info(`Deleting schedule for ${tournamentId}`);
   await deleteScheduleForTournament(tournamentId);
   revalidatePath(`/tournament/${tournamentId}`);
@@ -47,6 +50,7 @@ export async function startMatch({
   matchId: string;
   tournamentId: string;
 }) {
+  await isUserATournamentAdmin(tournamentId);
   try {
     await setMatchToStarted({ matchId });
     revalidatePath(`/tournament/${tournamentId}`);

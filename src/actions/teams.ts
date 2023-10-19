@@ -1,6 +1,7 @@
 "use server";
 import { createTeam } from "@/db/teams";
 import { revalidatePath } from "next/cache";
+import { isUserATournamentAdmin } from "./tournament";
 
 export async function addTeamToTournament({
   tournamentId,
@@ -10,6 +11,7 @@ export async function addTeamToTournament({
   teamName: string;
 }) {
   console.log({ tournamentId, teamName });
+  await isUserATournamentAdmin(tournamentId);
   try {
     await createTeam({ tournamentId, teamName });
   } catch (e) {
