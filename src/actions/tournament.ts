@@ -12,6 +12,7 @@ import { createRandomeScheduleForTeams } from "@/lib/tournament";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
 export async function isUserATournamentAdmin(id: string, throws = true) {
   const session = await getServerSession(authOptions);
@@ -38,7 +39,16 @@ export async function createTournament(
   tournamentName: string,
   epochStart: number,
 ) {
-  const startTime = new Date(epochStart);
+  let startTime;
+  try {
+    z.number().parse(epochStart);
+    startTime = new Date(epochStart);
+  } catch (err) {
+    const e = "Error getting date from provided value";
+    console.error(e);
+    console.error(err);
+    return e;
+  }
   console.log({ tournamentName, startTime });
   const session = await getServerSession(authOptions);
   const email = session?.user?.email;
@@ -49,7 +59,13 @@ export async function createTournament(
     );
     throw new Error("Unable to find email for logged in user");
   }
-  //TODO: validate arguments
+  try {
+  } catch (err) {
+    z.string().parse(tournamentName);
+    console.error("tournamentName value provided is not a string");
+    console.error(err);
+    return "tournamentName value provided is not a string";
+  }
 
   try {
     const tournament = await createTournamentFromEmail({
