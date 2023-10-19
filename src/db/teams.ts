@@ -1,6 +1,5 @@
 import { db } from "@/db/index";
 import { teams, matches } from "@/db/schema";
-import { match } from "assert";
 import { and, eq, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
