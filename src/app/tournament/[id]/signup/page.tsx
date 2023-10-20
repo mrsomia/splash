@@ -1,6 +1,7 @@
 import { getTeamsForTournament } from "@/db/teams";
 import NewTeamForm, { DeleteScheduleForm } from "@/components/NewTeamForm";
 import { getMatchesForTournament } from "@/db/tournament";
+import QRCode from "react-qr-code";
 
 type PageProps = {
   params: {
@@ -23,6 +24,12 @@ export default async function SignUpPage({ params }: PageProps) {
           teamNumber={teams ? teams.length + 1 : 1}
         />
       )}
+      <div className="max-w-sm md:max-w-lg space-y-2">
+        <p className="">Share tournament</p>
+        <div className="bg-white p-4">
+          <QRCode value={`${process.env.VERCEL_URL}/tournament/${params.id}`} />
+        </div>
+      </div>
     </div>
   );
 }

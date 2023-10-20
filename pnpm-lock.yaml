@@ -65,6 +65,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  react-qr-code:
+    specifier: ^2.0.12
+    version: 2.0.12(react@18.2.0)
   sonner:
     specifier: ^1.0.3
     version: 1.0.3(react-dom@18.2.0)(react@18.2.0)
@@ -3476,6 +3479,10 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
+  /qr.js@0.0.0:
+    resolution: {integrity: sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==}
+    dev: false
+
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -3496,6 +3503,20 @@ packages:
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: true
+
+  /react-qr-code@2.0.12(react@18.2.0):
+    resolution: {integrity: sha512-k+pzP5CKLEGBRwZsDPp98/CAJeXlsYRHM2iZn1Sd5Th/HnKhIZCSg27PXO58zk8z02RaEryg+60xa4vyywMJwg==}
+    peerDependencies:
+      react: ^16.x || ^17.x || ^18.x
+      react-native-svg: '*'
+    peerDependenciesMeta:
+      react-native-svg:
+        optional: true
+    dependencies:
+      prop-types: 15.8.1
+      qr.js: 0.0.0
+      react: 18.2.0
+    dev: false
 
   /react@18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
