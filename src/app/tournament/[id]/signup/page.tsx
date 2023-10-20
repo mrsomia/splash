@@ -27,7 +27,11 @@ export default async function SignUpPage({ params }: PageProps) {
       <div className="max-w-sm md:max-w-lg space-y-2">
         <p className="">Share tournament</p>
         <div className="bg-white p-4">
-          <QRCode value={`${process.env.VERCEL_URL}/tournament/${params.id}`} />
+          <QRCode
+            value={`http${process.env.NODE_ENV == "production" ? "s" : ""}://${
+              process.env.VERCEL_URL
+            }/tournament/${params.id}`}
+          />
         </div>
       </div>
     </div>
