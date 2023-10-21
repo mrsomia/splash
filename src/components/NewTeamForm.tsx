@@ -31,6 +31,9 @@ export default function NewTeamForm({
       return;
     }
     toast.success("Team added");
+    if (isNaN(Number(name))) {
+      return;
+    }
     setName((name) => (Number(name) + 1).toString());
   };
   return (
