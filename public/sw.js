@@ -11,23 +11,46 @@ self.addEventListener("push", (event) => {
   if (!(self.Notification && self.Notification.permission === "granted")) {
     return;
   }
+  const data = event.data?.json()
+  const title = data.title || "A game is starting"
+  const message = data.message || "A game is starting for a team you asked to be notified about";
+  const link = data.link
+  const icon = data.icon
 
-  console.log(data)
-  const data = event.data?.json() ?? {};
-  const title = data.title || "Your game is starting";
-  const message =
-    data.message || "You are up next to play, head to the tables";
-  // const icon = "images/new-notification.png";
-
-  const notification = new Notification(title, {
+  self.registration.showNotification(title, {
     body: message,
-    // tag: "simple-push-demo-notification",
-    // icon,
-  });
+    data: link,
+    vibrate: [500, 400, 500, 400, 500],
+    icon, // string to icon url
+  })
 
-  // notification.addEventListener("click", () => {
-  //   clients.openWindow(
-  //     "https://example.blog.com/2015/03/04/something-new.html",
-  //   );
-  // });
+});
+
+self.addEventListener("notificationclick", (event) => {
+  console.log("On notification click: ", event.notification.tag);
+  console.log(event.notification)
+  event.notification.close();
+
+  // This looks to see if the current is already open and
+  // focuses if it is
+  event.waitUntil(
+    clients
+      .matchAll({
+        type: "window",
+      })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if (event.notification.data) {
+            if (client.url === event.notification.data && "focus" in client) {
+              return client.focus()
+            }
+          }
+          if (client.url === "/" && "focus" in client) return client.focus();
+        }
+        if (event.notification.data) {
+          return clients.openWindow(event.notification.data)
+        }
+        if (clients.openWindow) return clients.openWindow("/");
+      }),
+  );
 });
