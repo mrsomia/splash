@@ -27,7 +27,7 @@ export default function SubscribeButton({
   return (
     <button
       onClick={handleClick}
-      className="my-4 py-2 px-4 bg-green-700 hover:bg-green-900 disabled:bg-slate-400 rounded-full w-3/4 self-center"
+      className="my-4 py-2 px-4 bg-green-700 hover:bg-green-900 disabled:bg-slate-400 rounded-full w-40 self-center"
     >
       Get Notified
     </button>
