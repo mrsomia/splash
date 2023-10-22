@@ -150,6 +150,23 @@ export const teamRelations = relations(teams, ({ one, many }) => ({
   userToTeams: many(userToTeams),
 }));
 
+export const pushSubs = pgTable(
+  "push_subs",
+  {
+    id: text("id")
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => nanoid()),
+    teamId: text("team_id")
+      .notNull()
+      .references(() => teams.id),
+    subData: text("sub_data").notNull(),
+  },
+  (sub) => ({
+    unq: unique().on(sub.teamId, sub.subData),
+  }),
+);
+
 export const userToTeams = pgTable(
   "users_to_teams",
   {
