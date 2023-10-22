@@ -21,3 +21,17 @@ export async function addTeamToTournament({
   }
   revalidatePath(`/tournament/${tournamentId}`);
 }
+
+export async function subscribeTotTeamNotificaitons({
+  tournamentId,
+  teamId,
+  sub,
+}: {
+  tournamentId: string;
+  teamId: string;
+  sub: string;
+}) {
+  // Store push notification data
+  // Send test notification
+  console.log({ tournamentId, teamId, sub });
+}
