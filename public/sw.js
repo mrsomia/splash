@@ -45,7 +45,8 @@ self.addEventListener("notificationclick", (event) => {
               return client.focus()
             }
           }
-          if (client.url === "/" && "focus" in client) return client.focus();
+          // Focus on already open tab, delete line to open link in next block
+          if (client.url && "focus" in client) return client.focus();
         }
         if (event.notification.data) {
           return clients.openWindow(event.notification.data)
