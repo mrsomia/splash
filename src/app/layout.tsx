@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Toaster } from "sonner";
+import LoadWorker from "@/components/LoadWorker";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default async function RootLayout({
         <body className={`${inter.className} bg-slate-900 text-white`}>
           {children}
           <Toaster richColors />
+          <LoadWorker />
         </body>
       </html>
     </Provider>
