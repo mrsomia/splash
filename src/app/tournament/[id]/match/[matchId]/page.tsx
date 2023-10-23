@@ -1,10 +1,9 @@
 import { getMatchDetails } from "@/db/match";
 import WinnerForm from "@/components/WinnerForm";
-import { getTournamentFromId, isUserAnAdmin } from "@/db/tournament";
+import { isUserAnAdmin } from "@/db/tournament";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import { match } from "assert";
 import StartMatchButton from "@/components/StartMatchButton";
 
 type PageProps = {
