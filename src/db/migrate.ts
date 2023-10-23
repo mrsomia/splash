@@ -6,11 +6,11 @@ import dotenv from "dotenv";
 dotenv.config({ path: "./.env.production.local" });
 
 async function runMigrations() {
-  if (!process.env.DRIZZLE_DATABASE_URL) {
+  if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL is not set in env");
   }
 
-  const migrationClient = postgres(process.env.DRIZZLE_DATABASE_URL, {
+  const migrationClient = postgres(process.env.DATABASE_URL, {
     max: 1,
   });
   console.log("⏳ Running migrations...");
