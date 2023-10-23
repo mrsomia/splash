@@ -10,6 +10,7 @@
     "test": "vitest",
     "db:push": "drizzle-kit push:pg",
     "db:mig:gen": "drizzle-kit generate:pg",
+    "db:mig:prod": "tsx src/db/migrate.ts",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
