@@ -1,6 +1,6 @@
 import { db } from "@/db/index";
 import { tournamentAdmins, tournaments, users, matches, teams } from "./schema";
-import { eq, asc } from "drizzle-orm";
+import { eq, lte, asc } from "drizzle-orm";
 import {
   createRandomeScheduleForTeams,
   getNumberOfRounds,
@@ -63,6 +63,24 @@ export async function getTournamentsFromEmail(email: string, limit = 0) {
     .limit(limit);
 
   return tournamentsWhereUserIsAdmin;
+}
+
+export async function getOtherRecentTournaments() {
+  const fiveDaysAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 5);
+  const recentTournaments = await db
+    .select({
+      id: tournaments.id,
+      name: tournaments.name,
+      winner: tournaments.winner,
+      createdAt: tournaments.createdAt,
+      startTime: tournaments.startTime,
+      completedAt: tournaments.completedAt,
+    })
+    .from(tournaments)
+    .where(lte(tournaments.startTime, fiveDaysAgo))
+    .orderBy(tournaments.startTime);
+
+  return recentTournaments;
 }
 
 export async function isUserAnAdmin(email: string, tournamentId: string) {
