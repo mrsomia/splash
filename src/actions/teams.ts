@@ -2,6 +2,8 @@
 import { createTeam } from "@/db/teams";
 import { revalidatePath } from "next/cache";
 import { isUserATournamentAdmin } from "./tournament";
+import { z } from "zod";
+import { addTeamNotification } from "@/db/notifications";
 
 export async function addTeamToTournament({
   tournamentId,
@@ -31,7 +33,24 @@ export async function subscribeTotTeamNotificaitons({
   teamId: string;
   sub: string;
 }) {
-  // Store push notification data
-  // Send test notification
   console.log({ tournamentId, teamId, sub });
+  const subscription = z.object({
+    endpoint: z.string().url(),
+    keys: z.object({
+      p256dh: z.string(),
+      auth: z.string(),
+    }),
+  });
+  try {
+    if (!sub) {
+      throw new Error("No subscription data found");
+    }
+    subscription.passthrough().parse(JSON.parse(sub));
+    await addTeamNotification(teamId, sub);
+  } catch (error) {
+    // Handle parsing error, e.g., invalid input format
+    console.error("Error saving notification data", error);
+    return "Error saving notification data";
+  }
+  // add test notification ?
 }
