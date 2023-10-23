@@ -3,6 +3,7 @@
     "background_color": "#0f172a",
     "display": "fullscreen",
     "scope": "/",
+    "start_url": "/",
     "name": "splash",
     "short_name": "splash",
     "icons": [
