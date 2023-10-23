@@ -7,15 +7,20 @@ dotenv.config({ path: "./.env.production.local" });
 
 async function runMigrations() {
   if (!process.env.MIGRATION_DATABASE_URL) {
-    throw new Error("DATABASE_URL is not set in env");
+    throw new Error("MIGRATION_DATABASE_URL is not set in env");
   }
 
-  const migrationClient = postgres(process.env.MIGRATION_DATABASE_URL);
+  const migrationClient = postgres(process.env.MIGRATION_DATABASE_URL, {
+    max: 1,
+  });
+  const db = drizzle(migrationClient, { logger: true });
   console.log("⏳ Running migrations...");
-  migrate(drizzle(migrationClient), {
+  const start = Date.now();
+  await migrate(db, {
     migrationsFolder: `${__dirname}/migrations`,
   });
-  console.log("✅ Migrations complete");
+  const end = Date.now();
+  console.log(`✅ Migrations complete, took ${end - start}ms`);
   process.exit(0);
 }
 
