@@ -28,7 +28,7 @@ export default function SubscribeButton({
   }, []);
 
   useEffect(() => {
-    if (window) {
+    if (window && Notification) {
       setNotificationPermission(Notification.permission);
     }
   }, []);
