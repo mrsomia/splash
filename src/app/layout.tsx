@@ -10,8 +10,11 @@ import LoadWorker from "@/components/LoadWorker";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Splash tournaments",
-  description: "The tool to help you run a bar tournament",
+  title: "Splash",
+  description: "The tool for your next bar tournament",
+  manifest: "/manifest.json",
+  icons: { apple: "./icon-512x512.png" },
+  themeColor: "#0f172a",
 };
 
 export default async function RootLayout({
