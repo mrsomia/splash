@@ -1,6 +1,7 @@
 import SignInButton, { SignUpButton } from "@/components/SignInButton";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -24,6 +25,14 @@ export default async function Home() {
             <div className="flex justify-center py-4 gap-6">
               <SignUpButton />
               <SignInButton />
+            </div>
+            <div className="flex justify-center py-2">
+              <Link
+                href="/dashboard"
+                className="text-underline text-orange-600"
+              >
+                Go to Recent Tournaments
+              </Link>
             </div>
             <div className="w-full max-w-full space-y-4 mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
