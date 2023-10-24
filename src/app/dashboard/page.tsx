@@ -20,7 +20,7 @@ export default async function Dasboard() {
     <main className="w-full py-6">
       <div className="w-100 md:max-w-4xl md:mx-auto mx-8 px-4 md:px-6">
         <div className="w-100 flex justify-end md:justify-between py-2">
-          <h1 className="text-xl font-bold ml-4 mr-auto md:inline-block hidden">
+          <h1 className="text-xl font-bold ml-4 mr-auto md:inline-block hidden pb-4">
             Tournaments
           </h1>
           <Link className="inline-block px-6" href="/tournament/new">
@@ -53,7 +53,7 @@ export default async function Dasboard() {
             </div>
           ) : (
             <div className="px-2 py-6 md:py-12 mx-auto text-center">
-              <p className="py-4 text-xl lg:text-3xl font-medium lg:font-semibold">
+              <p className="py-4 text-lg">
                 No tournaments where you are the admin
               </p>
               <p className="text-zinc-200">
@@ -64,7 +64,7 @@ export default async function Dasboard() {
           <h2 className="text-lg md:text-xl font-semibold md:font-bold">
             Recent Tournaments
           </h2>
-          {otherTournaments.length && (
+          {otherTournaments.length ? (
             <div className="grid grid-cols-1 md:grid-cols-3 my-10 mx-3">
               {otherTournaments.map((t) => (
                 <Link key={t.id} href={`/tournament/${t.id}`}>
@@ -83,6 +83,10 @@ export default async function Dasboard() {
                   </div>
                 </Link>
               ))}
+            </div>
+          ) : (
+            <div className="px-2 py-6 md:py-12 mx-auto text-center">
+              <p className="text-zinc-200">No recent tournaments</p>
             </div>
           )}
         </Suspense>
